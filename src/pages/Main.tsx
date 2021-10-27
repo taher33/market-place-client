@@ -24,9 +24,9 @@ function Main({}: Props): ReactElement {
           </section> */}
           <div className={styles.mainFeed}>
             <div className={styles.listings}>
-              <Listings name="food" />
-              <Listings name="Cars" />
-              <Listings name="recomended" />
+              <Listings name="food" seeMore />
+              <Listings name="Cars" seeMore />
+              <Listings name="recomended" seeMore />
             </div>
           </div>
         </div>

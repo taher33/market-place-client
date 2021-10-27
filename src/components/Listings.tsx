@@ -5,9 +5,10 @@ import styles from "../styles/listings.module.scss";
 
 interface Props {
   name: String;
+  seeMore?: boolean;
 }
 
-function Listings({ name }: Props): ReactElement {
+function Listings({ name, seeMore }: Props): ReactElement {
   const router = useHistory();
 
   const data = [1, 2, 3, 4, 5, 6];
@@ -16,9 +17,7 @@ function Listings({ name }: Props): ReactElement {
     <div className={styles.container}>
       <div className={styles.title}>
         <h1>{name}</h1>
-        <Link to="#">
-          <span>see all</span>
-        </Link>
+        <Link to="#">{seeMore && <span>see all</span>}</Link>
       </div>
       <div className={styles.itemsWrapper}>
         {data.map((el) => (

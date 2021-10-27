@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route, Link } from "react-router-dom";
+import Chat from "./pages/Chat";
 import Landing from "./pages/Main";
 import Signup from "./pages/Signup";
 import SingleProduct from "./pages/SingleProduct";
@@ -15,6 +16,9 @@ function App(): JSX.Element {
           <li>
             <Link to="/signup">signup</Link>
           </li>
+          <li>
+            <Link to="/chat">chat</Link>
+          </li>
         </ul>
       </nav>
 
@@ -27,6 +31,9 @@ function App(): JSX.Element {
         </Route>
         <Route path="/product">
           <SingleProduct />
+        </Route>
+        <Route path="/chat">
+          <Chat />
         </Route>
       </Switch>
     </div>

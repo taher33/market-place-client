@@ -1,0 +1,40 @@
+.container {
+  height: calc(100vh - 100px);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  //   grid-column-gap: 3rem;
+  //   grid-row-gap: 20px;
+  justify-items: stretch;
+  align-items: stretch;
+
+  overflow: hidden;
+  aside {
+    display: none;
+  }
+  .mainChat {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    // display: grid;
+    // grid-template-rows: 1fr auto;
+    height: inherit;
+    .messagesWrapper {
+      height: 100%;
+      overflow-y: scroll;
+    }
+    form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: stretch;
+      background-color: rgba(0, 0, 0, 0.924);
+      input {
+        font-family: "inter";
+        padding: 0.6rem 1rem;
+        border-radius: 0.6rem;
+        outline: none;
+        border: blueviolet 1px solid;
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.container {
+  max-width: 80%;
+  width: fit-content;
+
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+  background-color: blueviolet;
+  padding: 0.4rem 0.4rem 0.4rem 0.6rem;
+  border-radius: 0.8rem 0.4rem 0 0.8rem;
+
+  p {
+    color: white;
+    line-break: anywhere;
+    margin: 0;
+  }
+}
+
+.sender {
+  display: flex;
+
+  img {
+    height: 35px;
+    width: 35px;
+    margin-right: 0.4rem;
+    border-radius: 50%;
+  }
+
+  p {
+    max-width: 80%;
+    line-break: anywhere;
+    width: fit-content;
+    padding: 0.4rem 0.6rem 0.4rem 0.4rem;
+    border-radius: 0 0.8rem 0.8rem 0.4rem;
+    border: 1px solid #b1b1b1;
+  }
+}

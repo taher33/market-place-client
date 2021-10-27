@@ -35,7 +35,7 @@ function SingleProduct({}: Props): ReactElement {
             <input
               type="text"
               name="message"
-              defaultValue="is this still available"
+              defaultValue="is this still available ?"
             />
             <button type="submit">send</button>
           </form>
@@ -65,8 +65,8 @@ function SingleProduct({}: Props): ReactElement {
         </div>
       </div>
       <div className={styles.featured}>
-        <h2>similar products</h2>
-        <Listings name="" />
+        {/* <h2>similar products</h2> */}
+        <Listings name="featured products" />
       </div>
     </div>
   );
