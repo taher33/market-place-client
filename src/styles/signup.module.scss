@@ -1,0 +1,90 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  h2 {
+    font-size: 45px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    opacity: 80%;
+    font-size: 19px;
+    font-weight: 300;
+
+    a {
+      opacity: 100%;
+      text-decoration: none;
+      color: blueviolet;
+      font-weight: 600;
+    }
+  }
+
+  form {
+    label {
+      opacity: 75%;
+      font-size: 1rem;
+      font-weight: 300;
+    }
+    input {
+      margin-bottom: 2rem;
+      display: block;
+      width: 98%;
+      font-size: 25px;
+      padding: 0.6rem 0.6rem;
+      outline: none;
+      border: none;
+      border-bottom: rgba(0, 0, 0, 0.212) solid 1px;
+      font-family: "Inter";
+
+      &:focus {
+        border-bottom: rgb(137, 43, 226) solid 1px;
+      }
+    }
+
+    button {
+      font-family: "Inter";
+      border: none;
+      padding: 1rem 3rem;
+      cursor: pointer;
+      background-color: blueviolet;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+    }
+  }
+  img {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    h2 {
+      font-size: 50px;
+    }
+    // p {
+    //   font-size: 24px;
+    // }
+
+    // form {
+    //   label {
+    //     font-size: 20px;
+    //   }
+    //   input {
+    //     font-size: 30px;
+    //   }
+    // }
+
+    img {
+      display: block;
+      margin-left: 2rem;
+    }
+  }
+}
