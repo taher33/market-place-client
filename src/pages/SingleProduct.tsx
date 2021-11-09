@@ -1,35 +1,58 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
-import useQuery from "../utils/usequery";
+import { useQuery as useParams } from "../utils/usequery";
+import { useQuery } from "react-query";
 import Listings from "../components/Listings";
 
 import styles from "../styles/singleProduct.module.scss";
+import { axios_instance } from "../utils/axios";
 
 interface Props {}
 
-function SingleProduct({}: Props): ReactElement {
-  const [loading, setloading] = useState(false);
-  const query = useQuery();
-  const id = query.get("id");
-  const myref = useRef(null);
+interface User {
+  profileImg: String;
+  People_I_follow: [string];
+  People_that_follow_me: [string];
+  email: string;
+  _id: string;
+  name: string;
+}
 
-  useEffect(() => {
-    setloading(true);
-    setTimeout(() => {
-      setloading(false);
-    }, 1000);
-    if (myref) {
-      let scrol = myref.current as any;
-      // scrol.scrollIntoView();
-    }
-  }, [id]);
-  // if (loading) return <h1>loading ...</h1>;
+interface Product {
+  condition: String;
+  saves: number;
+  price: number;
+  stock: number;
+  pictures: [string];
+  createdAt: string;
+  rating: number;
+  _id: string;
+  description: string;
+  seller: User;
+  categorie: string;
+  details: string;
+  modifiedAt: string;
+}
+
+function SingleProduct({}: Props): ReactElement {
+  const query = useParams();
+  const id = query.get("id");
+  const { data, isLoading } = useQuery("product", () =>
+    axios_instance(true)({
+      method: "GET",
+      url: "/products/singleProduct?_id=" + id,
+    })
+  );
+  const product = data?.data.product as Product;
+  console.log(product);
+
+  if (isLoading) return <h1>loading ...</h1>;
   return (
     <div className={styles.container}>
       <div className={styles.productWrapper}>
-        <img ref={myref} src="/product.jpg" alt="product" />
+        <img src={product.pictures[0]} alt="product" />
         <div className={styles.textWrapper}>
-          <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </h2>
-          <h3>89 USD</h3>
+          <h2>{product.description} </h2>
+          <h3>{product.price} USD</h3>
           <p>send a message to the seller</p>
           <form>
             <input
@@ -45,27 +68,30 @@ function SingleProduct({}: Props): ReactElement {
           </div>
           <div className={styles.user}>
             <img src="/delivery.png" alt="user" />
-            <p>john doe</p>
+            <p>{product.seller.name}</p>
             <span>follow</span>
           </div>
           <p className={styles.dateSince}>has been a seeler since 2065</p>
           <h4>Details</h4>
           <div className={styles.detail}>
-            <h5>condition</h5>
-            <p>good as new</p>
+            {product.condition && (
+              <>
+                <h5>condition</h5>
+                <p>{product.condition}</p>
+              </>
+            )}
           </div>
           <div className={styles.detail}>
-            <h5>description</h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              et mattis non sed tristique nisi. In faucibus donec phasellus sit
-              sed nam odio.
-            </p>
+            {product.details && (
+              <>
+                <h5>description</h5>
+                <p>{product.details}</p>
+              </>
+            )}
           </div>
         </div>
       </div>
       <div className={styles.featured}>
-        {/* <h2>similar products</h2> */}
         <Listings name="featured products" />
       </div>
     </div>

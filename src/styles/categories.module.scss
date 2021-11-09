@@ -1,0 +1,32 @@
+.container {
+  aside {
+    display: none;
+  }
+  .categories {
+    padding-top: 1.5rem;
+    display: flex;
+    a {
+      margin-right: 2rem;
+      font-size: 1.1rem;
+      font-weight: 300;
+      text-decoration: none;
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 900rem;
+
+      &:hover {
+        background-color: rgb(194, 194, 194);
+      }
+    }
+  }
+}
+
+@media (min-width: 786px) {
+  .container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    aside {
+      display: block;
+    }
+  }
+}

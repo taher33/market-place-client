@@ -14,13 +14,22 @@ function Main({}: Props): ReactElement {
           <SidebarFeed />
         </div>
         <div className={styles.main}>
-          {/* <section className={styles.hero}>
-            <h1>Start buying and selling on the web</h1>
-            <p>
-              get in contact with sellers from around the world or become a pro
-              seller with our easy to use interface
-            </p>
-            <button>create an acount</button>
+          {/* <section>
+            <h2>Categories</h2>
+            <div className={styles.categories}>
+              <div>
+                <img src="/book.png" alt="book" />
+                <p>books</p>
+              </div>
+              <div>
+                <img src="/fashion.png" alt="book" />
+                <p>books</p>
+              </div>
+              <div>
+                <img src="/gamepad.png" alt="book" />
+                <p>books</p>
+              </div>
+            </div>
           </section> */}
           <div className={styles.mainFeed}>
             <div className={styles.listings}>

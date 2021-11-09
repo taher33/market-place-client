@@ -2,36 +2,38 @@
   .main {
     max-width: 1450px;
 
-    .hero {
-      text-align: center;
-      padding: 1rem 0.3rem;
-      margin-bottom: 2rem;
-      h1 {
-        font-size: 30px;
-        text-transform: capitalize;
-        line-height: 120%;
+    section {
+      ::-webkit-scrollbar {
+        height: 10px;
       }
-      p {
-        line-height: 140%;
-        opacity: 80%;
-        font-weight: 500;
+      ::-webkit-scrollbar-track {
+        background-color: blue;
+        height: inherit;
+        border-radius: 90rem;
       }
-      button {
-        margin-top: 2rem;
-        border: none;
-        background-color: blueviolet;
-        color: white;
-        padding: 1rem 1.6rem;
-        border-radius: 1rem;
-        font-family: "Inter";
-        font-weight: 700;
-        font-size: 1.1rem;
+      ::-webkit-scrollbar-thumb {
+        height: 5px;
+        border-radius: 90rem;
+        background-color: whitesmoke;
+      }
+      .categories {
+        overflow-x: scroll;
+        display: flex;
+        flex-wrap: nowrap;
+        div {
+          margin-right: 3rem;
+          display: inline-block;
+          text-align: center;
+          img {
+            height: 5rem;
+          }
+        }
       }
     }
-  }
-  padding: 1rem;
-  .sideBar {
-    display: none;
+    padding: 1rem;
+    .sideBar {
+      display: none;
+    }
   }
 }
 // display: grid;
@@ -75,7 +77,7 @@
     .sideBar {
       position: -webkit-sticky;
       position: sticky;
-      top: 20px;
+      top: 90px;
       height: fit-content;
       display: block;
     }

@@ -20,9 +20,12 @@
 
   img {
     height: 35px;
+    min-height: 35px;
+    min-width: 35px;
     width: 35px;
     margin-right: 0.4rem;
     border-radius: 50%;
+    object-fit: cover;
   }
 
   p {

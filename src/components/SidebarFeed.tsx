@@ -1,51 +1,69 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
+
 import {
-  faCar,
-  faCarBattery,
-  faEthernet,
-  faPizzaSlice,
-  faTshirt,
-  faVenus,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  BiMessageSquareDots,
+  BiHomeAlt,
+  BiUser,
+  BiUpload,
+} from "react-icons/bi";
+import { CgSelect } from "react-icons/cg";
 
 import styles from "../styles/sidebarfeed.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 interface Props {}
 
 const SidebarFeed = (): ReactElement => {
+  const router = useHistory();
+  const location = router.location.pathname;
+
   return (
     <div className={styles.container}>
-      <h2>Categories</h2>
       <ul>
-        <li>
-          <Link to="#">
-            <FontAwesomeIcon icon={faCar} /> cars
+        <li
+          id="home"
+          className={`${
+            location.match("/") && location.length === 1 ? styles.selected : ""
+          }`}
+        >
+          <Link to="/">
+            <BiHomeAlt /> home
           </Link>
         </li>
-        <li>
-          <Link to="#">
-            <FontAwesomeIcon icon={faEthernet} />
-            electronics
+        <li
+          id="messages"
+          className={`${location.startsWith("/chat") && styles.selected}`}
+        >
+          <Link to="/chat">
+            <BiMessageSquareDots />
+            messages
           </Link>
         </li>
-        <li>
-          <Link to="#">
-            <FontAwesomeIcon icon={faCarBattery} />
-            boats
+        <li
+          id="categories"
+          className={`${location.startsWith("/categories") && styles.selected}`}
+        >
+          <Link to="/categories">
+            <CgSelect />
+            categories
           </Link>
         </li>
-        <li>
+        <li
+          id="profile"
+          className={`${location.startsWith("/profile") && styles.selected}`}
+        >
           <Link to="#">
-            <FontAwesomeIcon icon={faTshirt} />
-            cloths
+            <BiUser />
+            profile
           </Link>
         </li>
-        <li>
-          <Link to="#">
-            <FontAwesomeIcon icon={faPizzaSlice} />
-            food
+        <li
+          id="uplaod"
+          className={`${location.startsWith("/profile") && styles.selected}`}
+        >
+          <Link to="/uplaod">
+            <BiUpload />
+            upload
           </Link>
         </li>
       </ul>
