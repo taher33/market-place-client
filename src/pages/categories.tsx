@@ -14,12 +14,16 @@ function Categories({}: Props): ReactElement {
   const router = useHistory();
   const query = getQueryParams().toString();
 
-  const { data } = useQuery(["products", query.toString()], () =>
-    axios_instance(true)({
-      method: "GET",
-      url: "products?" + query,
-    })
+  const { data, isLoading, isError } = useQuery(
+    ["products", query.toString()],
+    () =>
+      axios_instance(true)({
+        method: "GET",
+        url: "products?" + query,
+      })
   );
+  if (isLoading) return <h2>loading</h2>;
+  if (isError) return <h2 style={{ color: "red" }}>error</h2>;
   return (
     <div className={styles.container}>
       <aside>

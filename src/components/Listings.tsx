@@ -37,13 +37,14 @@ interface Product {
 function Listings({ name, seeMore }: Props): ReactElement {
   const router = useHistory();
 
-  const { data } = useQuery("products", () =>
+  const { data, isError, isLoading } = useQuery("products", () =>
     axios_instance(true)({
       method: "GET",
       url: "/products?categorie=cloths",
     })
   );
-
+  if (isLoading) return <h2>loading</h2>;
+  if (isError) return <h2 style={{ color: "red" }}>error</h2>;
   return (
     <div className={styles.container}>
       <div className={styles.title}>
