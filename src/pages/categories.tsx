@@ -22,8 +22,6 @@ function Categories({}: Props): ReactElement {
         url: "products?" + query,
       })
   );
-  if (isLoading) return <h2>loading</h2>;
-  if (isError) return <h2 style={{ color: "red" }}>error</h2>;
   return (
     <div className={styles.container}>
       <aside>
@@ -36,23 +34,29 @@ function Categories({}: Props): ReactElement {
           <Link to="?categorie=sports">sports</Link>
           <Link to="?categorie=games">games</Link>
         </div>
-        <div className={styles.listings}>
-          {data?.data.products.map((product: Product) => (
-            <div key={product._id} className={styles.item}>
-              <img
-                src={product.pictures[0]}
-                alt="item"
-                onClick={() => {
-                  router.replace("/product?id=" + product._id);
-                }}
-              />
-              <div className={styles.details}>
-                <p>{product.description}</p>
-                <h3>{product.price} USD</h3>
+        {isLoading ? (
+          <h2>loading</h2>
+        ) : isError ? (
+          <h2 style={{ color: "red" }}>error</h2>
+        ) : (
+          <div className={styles.listings}>
+            {data?.data.products.map((product: Product) => (
+              <div key={product._id} className={styles.item}>
+                <img
+                  src={product.pictures[0]}
+                  alt="item"
+                  onClick={() => {
+                    router.replace("/product?id=" + product._id);
+                  }}
+                />
+                <div className={styles.details}>
+                  <p>{product.description}</p>
+                  <h3>{product.price} USD</h3>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );
