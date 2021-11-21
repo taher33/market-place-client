@@ -1,18 +1,75 @@
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { ReactElement, useState } from "react";
-
+import React, { ReactElement, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useHistory } from "react-router";
+import { Link } from "react-router-dom";
+import { ChatPeople } from "../components/chatpeople";
 import Message from "../components/message";
 import SidebarFeed from "../components/SidebarFeed";
-import { ChatPeople, User } from "../components/chatpeople";
-
 import styles from "../styles/chat.module.scss";
+import { useAppContext } from "../utils/context";
+import { Messages, Response, User } from "../utils/types";
+import { useQuery as getQueryParams } from "../utils/usequery";
 
 interface Props {}
-const people = [1, 2, 3, 4];
+interface MessageForm {
+  content: string;
+}
 function Chat({}: Props): ReactElement {
+  const { user, socket } = useAppContext();
+
+  const { handleSubmit, register } = useForm<MessageForm>();
+
+  const query = getQueryParams();
+  const reciever = query.get("id");
+
   const [showUsers, setShowUsers] = useState(true);
-  const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [messages, setMessages] = useState<Messages[]>([]);
+  const [connectedUsers, setConnectedUsers] = useState<User[]>();
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  useEffect(() => {
+    let isSubscibed = true;
+    socket.on("private message", (msg: Messages) => {
+      if (msg.sender === reciever && isSubscibed) {
+        let newMessages = [...messages];
+        newMessages.push(msg);
+        setMessages(newMessages);
+      }
+    });
+    return () => {
+      isSubscibed = false;
+    };
+  }, [messages, reciever, socket]);
+
+  useEffect(() => {
+    let payload = {
+      _id: user._id,
+    };
+    socket.emit("get connected users", payload, ({ status, users }: any) => {
+      setConnectedUsers(users);
+    });
+  }, [socket, user._id]);
+
+  const SendMessage = async (data: MessageForm) => {
+    if (!reciever && !user) return;
+    let payload = {
+      content: data.content,
+      sender: user._id,
+      reciever,
+    };
+    socket.emit(
+      "private message",
+      payload,
+      (res: { status: string; msg: any; error: any }) => {
+        if (res.status === "error") return console.log(res.error);
+        let newMessages = [...messages];
+        console.log(res);
+        newMessages.push(res.msg);
+        setMessages(newMessages);
+      }
+    );
+  };
   return (
     <div className={styles.container}>
       <aside>
@@ -32,43 +89,43 @@ function Chat({}: Props): ReactElement {
       </div>
       <div className={styles.mainChat}>
         <div className={styles.messagesWrapper}>
-          <Message myMessage />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message />
-          <Message myMessage />
-          <Message myMessage />
-          <Message />
-          <Message />
-          <Message myMessage />
-          <Message />
+          {messages.map((message, id) => (
+            <Message
+              key={id}
+              content={message.content}
+              myMessage={user._id === message.sender}
+            />
+          ))}
         </div>
         <div className={styles.inputWrapper}>
-          <form>
-            <input type="text" />
+          <form onSubmit={handleSubmit(SendMessage)}>
+            <input type="text" {...register("content")} />
             <button type="submit">send</button>
           </form>
         </div>
       </div>
       <div className={styles.people}>
         <h2>recent</h2>
-        {people.map((el) => (
-          <div
-            key={el}
-            onClick={() => setSelectedUser(el)}
-            className={`${styles.user} ${
-              el === selectedUser ? styles.selected : null
-            }`}
-          >
-            <img src="food.jpg" alt="user" />
-            <div>
-              <h5>user name</h5>
-              <p>last message</p>
-            </div>
-          </div>
-        ))}
+        {connectedUsers &&
+          connectedUsers.map((User) => (
+            <Link to={"/chat?id=" + User._id}>
+              <div
+                key={User._id}
+                onClick={() => {
+                  setSelectedUser(User._id);
+                }}
+                className={`${styles.user} ${
+                  User._id === selectedUser ? styles.selected : null
+                }`}
+              >
+                <img src="food.jpg" alt="user" />
+                <div>
+                  <h5>{User.name}</h5>
+                  <p>last message</p>
+                </div>
+              </div>
+            </Link>
+          ))}
       </div>
     </div>
   );

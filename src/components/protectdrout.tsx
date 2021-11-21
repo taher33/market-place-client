@@ -14,7 +14,7 @@ const ProtectRoute = ({ children, ...rest }: Props) => {
     <Route
       {...rest}
       render={() =>
-        isLogedIn ? children : <Redirect to={{ pathname: "/signup" }} />
+        isLogedIn ? children : <Redirect to={{ pathname: "/login" }} />
       }
     />
   );

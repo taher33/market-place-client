@@ -21,7 +21,7 @@ function Navbar({}: Props): ReactElement {
       </div>
       <div className={styles.links}>
         <Link to="/signup">sign up</Link>
-        <Link to="/signup">login</Link>
+        <Link to="/login">login</Link>
       </div>
       <div className={styles.svgMenu}>
         <BiMenu />

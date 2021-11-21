@@ -90,31 +90,35 @@
     align-items: stretch;
     .people {
       display: block;
-      .user {
-        display: flex;
-        margin-top: 1rem;
-        align-items: center;
-        padding: 1rem;
-        transition: all 0.3s ease-in-out;
+      a {
+        text-decoration: none;
+        color: inherit;
+        .user {
+          display: flex;
+          margin-top: 1rem;
+          align-items: center;
+          padding: 1rem;
+          transition: all 0.3s ease-in-out;
 
-        h5 {
-          text-transform: capitalize;
-          font-size: 1.2rem;
-          margin: 0;
-          margin-bottom: 0.3rem;
-        }
-        p {
-          margin: 0;
-          font-weight: 300;
-          font-size: 1rem;
-        }
-        img {
-          margin-right: 1rem;
-          height: 50px;
-          width: 50px;
-          min-width: 50px;
-          min-height: 50px;
-          border-radius: 50%;
+          h5 {
+            text-transform: capitalize;
+            font-size: 1.2rem;
+            margin: 0;
+            margin-bottom: 0.3rem;
+          }
+          p {
+            margin: 0;
+            font-weight: 300;
+            font-size: 1rem;
+          }
+          img {
+            margin-right: 1rem;
+            height: 50px;
+            width: 50px;
+            min-width: 50px;
+            min-height: 50px;
+            border-radius: 50%;
+          }
         }
       }
     }

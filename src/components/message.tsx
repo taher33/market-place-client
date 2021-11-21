@@ -4,15 +4,14 @@ import styles from "../styles/message.module.scss";
 
 interface Props {
   myMessage?: boolean;
+  content: string;
 }
 
-function Message({ myMessage }: Props): ReactElement {
+function Message({ myMessage, content }: Props): ReactElement {
   return (
     <div className={myMessage ? styles.container : styles.sender}>
       {!myMessage && <img src="/hero.jpg" alt="user" />}
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis quia,
-      </p>
+      <p>{content}</p>
     </div>
   );
 }

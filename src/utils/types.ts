@@ -1,5 +1,13 @@
+import { Dispatch, SetStateAction } from "react";
+import { Socket } from "socket.io-client";
+
+export interface Messages {
+  sender: string;
+  reciever: string;
+  content: string;
+}
 export interface User {
-  profileImg: String;
+  profileImg?: String;
   People_I_follow: [string];
   People_that_follow_me: [string];
   email: string;
@@ -20,4 +28,27 @@ export interface Product {
   categorie: string;
   details: string;
   modifiedAt: string;
+}
+
+export interface State {
+  user: User;
+  setUser: Dispatch<
+    SetStateAction<
+      | {
+          name: string;
+          email: string;
+          id: string;
+          profileImg: string | undefined;
+          People_I_follow: [string];
+          People_that_follow_me: [string];
+        }
+      | undefined
+    >
+  >;
+  socket: Socket;
+}
+
+export interface Response {
+  status: "error" | "success";
+  data: any;
 }
