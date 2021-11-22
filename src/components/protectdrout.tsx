@@ -1,7 +1,6 @@
 import React, { ReactElement } from "react";
 import { Redirect, Route } from "react-router-dom";
-
-const isLogedIn = true;
+import { useAppContext } from "../utils/context";
 
 interface Props {
   children: React.ReactElement;
@@ -10,6 +9,8 @@ interface Props {
 }
 
 const ProtectRoute = ({ children, ...rest }: Props) => {
+  const { user } = useAppContext();
+  const isLogedIn = user._id ? true : false;
   return (
     <Route
       {...rest}

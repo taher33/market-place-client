@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import ProtectRoute from "./components/protectdrout";
@@ -12,11 +12,33 @@ import Login from "./pages/Login";
 import SingleProduct from "./pages/SingleProduct";
 import { AppContext } from "./utils/context";
 import io from "socket.io-client";
+import { useQuery } from "react-query";
+import { axios_instance } from "./utils/axios";
+import { Response } from "./utils/types";
 
 const socket = io("http://localhost:8080/");
 
 function App(): JSX.Element {
   const [user, setUser] = useState({} as any);
+  useQuery(
+    "login",
+    () =>
+      axios_instance(true)({
+        method: "GET",
+        url: "users/checkLogin",
+      }),
+    {
+      onSuccess: (data) => {
+        setUser(data.data.user);
+        let payload = {
+          user: data.data.user,
+        };
+        socket.emit("connect to server", payload, (res: Response) => {
+          if (res.status === "error") return console.log(res.data);
+        });
+      },
+    }
+  );
   return (
     <AppContext.Provider value={{ user, setUser, socket }}>
       <div>
@@ -24,9 +46,9 @@ function App(): JSX.Element {
 
         <Scrolltotop />
         <Switch>
-          <ProtectRoute path="/" exact>
+          <Route path="/" exact>
             <Landing />
-          </ProtectRoute>
+          </Route>
           <ProtectRoute path="/profile">
             <Profile />
           </ProtectRoute>
@@ -36,9 +58,9 @@ function App(): JSX.Element {
           <Route path="/product">
             <SingleProduct />
           </Route>
-          <Route path="/chat">
+          <ProtectRoute path="/chat">
             <Chat />
-          </Route>
+          </ProtectRoute>
           <Route path="/categories">
             <Categories />
           </Route>

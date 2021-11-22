@@ -19,7 +19,7 @@ interface MessageForm {
 function Chat({}: Props): ReactElement {
   const { user, socket } = useAppContext();
 
-  const { handleSubmit, register } = useForm<MessageForm>();
+  const { handleSubmit, register, reset } = useForm<MessageForm>();
 
   const query = getQueryParams();
   const reciever = query.get("id");
@@ -51,6 +51,22 @@ function Chat({}: Props): ReactElement {
     });
   }, [socket, user._id]);
 
+  useEffect(() => {
+    if (!user || !reciever) return;
+    let payload = {
+      sender: user._id,
+      reciever,
+    };
+    socket.emit(
+      "get previous messages",
+      payload,
+      ({ status, prevMessages, error }: any) => {
+        if (status === "error") console.log(error);
+        setMessages(prevMessages);
+      }
+    );
+  }, [reciever, socket, user, user._id]);
+
   const SendMessage = async (data: MessageForm) => {
     if (!reciever && !user) return;
     let payload = {
@@ -64,11 +80,11 @@ function Chat({}: Props): ReactElement {
       (res: { status: string; msg: any; error: any }) => {
         if (res.status === "error") return console.log(res.error);
         let newMessages = [...messages];
-        console.log(res);
         newMessages.push(res.msg);
         setMessages(newMessages);
       }
     );
+    reset();
   };
   return (
     <div className={styles.container}>
@@ -89,13 +105,14 @@ function Chat({}: Props): ReactElement {
       </div>
       <div className={styles.mainChat}>
         <div className={styles.messagesWrapper}>
-          {messages.map((message, id) => (
-            <Message
-              key={id}
-              content={message.content}
-              myMessage={user._id === message.sender}
-            />
-          ))}
+          {messages &&
+            messages.map((message, id) => (
+              <Message
+                key={id}
+                content={message.content}
+                myMessage={user._id === message.sender}
+              />
+            ))}
         </div>
         <div className={styles.inputWrapper}>
           <form onSubmit={handleSubmit(SendMessage)}>
@@ -108,9 +125,8 @@ function Chat({}: Props): ReactElement {
         <h2>recent</h2>
         {connectedUsers &&
           connectedUsers.map((User) => (
-            <Link to={"/chat?id=" + User._id}>
+            <Link key={User._id} to={"/chat?id=" + User._id}>
               <div
-                key={User._id}
                 onClick={() => {
                   setSelectedUser(User._id);
                 }}

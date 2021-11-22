@@ -35,10 +35,14 @@ function Signup({}: Props): ReactElement {
         let payload = {
           user: data.data.user,
         };
-        socket.emit("connect to server", payload, (res: Response) => {
-          if (res.status === "error") return console.log(res.data);
-          router.push("/");
-        });
+        socket.emit(
+          "connect to server",
+          payload,
+          (res: { status: string; error: any }) => {
+            if (res.status === "error") return console.log(res.error);
+            router.push("/");
+          }
+        );
       },
     }
   );
@@ -53,7 +57,7 @@ function Signup({}: Props): ReactElement {
         <h2>Get </h2>
         <p>
           and get access to millions of clients -or-{"   "}
-          <Link to="/login">Login</Link>
+          <Link to="/signup">Sign up</Link>
         </p>
         <span>{isError && error.response.data.message}</span>
         <form onSubmit={handleSubmit(submitForm)}>
