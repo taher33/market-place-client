@@ -2,14 +2,13 @@ import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import { ChatPeople } from "../components/chatpeople";
 import Message from "../components/message";
 import SidebarFeed from "../components/SidebarFeed";
 import styles from "../styles/chat.module.scss";
 import { useAppContext } from "../utils/context";
-import { Messages, Response, User } from "../utils/types";
+import { Messages, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
 
 interface Props {}
@@ -35,6 +34,7 @@ function Chat({}: Props): ReactElement {
         let newMessages = [...messages];
         newMessages.push(msg);
         setMessages(newMessages);
+      } else {
       }
     });
     return () => {
@@ -116,7 +116,11 @@ function Chat({}: Props): ReactElement {
         </div>
         <div className={styles.inputWrapper}>
           <form onSubmit={handleSubmit(SendMessage)}>
-            <input type="text" {...register("content")} />
+            <input
+              type="text"
+              {...register("content")}
+              placeholder="write a message"
+            />
             <button type="submit">send</button>
           </form>
         </div>

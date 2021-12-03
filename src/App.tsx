@@ -15,6 +15,7 @@ import io from "socket.io-client";
 import { useQuery } from "react-query";
 import { axios_instance } from "./utils/axios";
 import { Response } from "./utils/types";
+import Upload from "./pages/Upload";
 
 const socket = io("http://localhost:8080/");
 
@@ -52,6 +53,9 @@ function App(): JSX.Element {
           <ProtectRoute path="/profile">
             <Profile />
           </ProtectRoute>
+          <Route path="/upload">
+            <Upload />
+          </Route>
           <Route path="/signup">
             <Signup />
           </Route>

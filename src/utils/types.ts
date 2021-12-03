@@ -13,6 +13,7 @@ export interface User {
   email: string;
   _id: string;
   name: string;
+  lastMessage?: "";
 }
 export interface Product {
   condition: String;

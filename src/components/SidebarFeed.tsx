@@ -10,12 +10,14 @@ import { CgSelect } from "react-icons/cg";
 
 import styles from "../styles/sidebarfeed.module.scss";
 import { Link, useHistory } from "react-router-dom";
+import { useAppContext } from "../utils/context";
 
 interface Props {}
 
 const SidebarFeed = (): ReactElement => {
   const router = useHistory();
   const location = router.location.pathname;
+  const { user } = useAppContext();
 
   return (
     <div className={styles.container}>
@@ -52,16 +54,16 @@ const SidebarFeed = (): ReactElement => {
           id="profile"
           className={`${location.startsWith("/profile") && styles.selected}`}
         >
-          <Link to="#">
+          <Link to={"/profile?id=" + user._id}>
             <BiUser />
             profile
           </Link>
         </li>
         <li
           id="uplaod"
-          className={`${location.startsWith("/profile") && styles.selected}`}
+          className={`${location.startsWith("/upload") && styles.selected}`}
         >
-          <Link to="/uplaod">
+          <Link to="/upload">
             <BiUpload />
             upload
           </Link>

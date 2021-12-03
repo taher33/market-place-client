@@ -1,0 +1,134 @@
+.container {
+  padding: 1rem;
+  aside {
+    display: none;
+  }
+
+  .formWrapper {
+    h2 {
+      margin-bottom: 2rem;
+      line-height: 135.02%;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+
+        input,
+        select {
+          margin-bottom: 2rem;
+          border: none;
+          border-bottom: 1px solid rgb(153, 153, 153);
+          outline: none;
+          transition: all 0.2s ease-in-out;
+          &:focus {
+            border-bottom: 1px solid rgb(29, 29, 29);
+          }
+        }
+
+        select {
+          font-size: 21px;
+          padding: 0.5rem 0.3rem;
+        }
+
+        input {
+          font-family: "Inter";
+          padding: 0.5rem 0.3rem;
+          font-size: 21px;
+          font-weight: 400;
+        }
+        label {
+          display: inline-block;
+          color: #5f5f5f;
+          font-weight: 300;
+          font-size: 18px;
+        }
+      }
+
+      .imageWrapper {
+        .imgPrv {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+          grid-column-gap: 0.5rem;
+          justify-items: stretch;
+          align-items: stretch;
+          .container {
+            position: relative;
+            .overlay {
+              position: absolute;
+              height: 10rem;
+              width: 10rem;
+              border-radius: 1rem;
+
+              background: linear-gradient(
+                180deg,
+                rgba(46, 46, 46, 0.6) 0%,
+                rgba(196, 196, 196, 0) 100%
+              );
+            }
+            svg {
+              right: -10px;
+              top: 20px;
+              z-index: 12;
+              position: absolute;
+              color: white;
+              font-size: 1.5rem;
+            }
+            img {
+              z-index: -1;
+              object-fit: cover;
+              border-radius: 1rem;
+              height: 10rem;
+              width: 10rem;
+            }
+          }
+        }
+        label {
+          color: #212121;
+          display: flex;
+          justify-content: center;
+          margin-top: 2rem;
+          padding: 0.8rem 1rem;
+          border: solid 2px #636363;
+          align-items: center;
+          border-radius: 12px;
+          font-size: 1.4rem;
+          font-weight: 500;
+          transition: all 0.2s ease-in-out;
+
+          svg {
+            margin-left: 0.5rem;
+          }
+
+          &:hover {
+            border: solid 2px #222222;
+            transform: scale(1.04);
+          }
+        }
+      }
+
+      button {
+        margin-top: 2rem;
+        background-color: black;
+        color: white;
+        text-transform: capitalize;
+        font-family: "Inter";
+        display: flex;
+        justify-content: center;
+        padding: 0.8rem 1rem;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.4rem;
+        font-weight: 500;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          transform: scale(1.04);
+        }
+      }
+    }
+  }
+}

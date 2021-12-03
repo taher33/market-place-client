@@ -6,7 +6,6 @@ import { useMutation } from "react-query";
 import styles from "../styles/signup.module.scss";
 import { axios_instance } from "../utils/axios";
 import { useAppContext } from "../utils/context";
-import { Response } from "../utils/types";
 
 interface Props {}
 interface Form {
