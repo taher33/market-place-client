@@ -51,7 +51,7 @@
       .imageWrapper {
         .imgPrv {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(10rem, 10rem));
           grid-column-gap: 0.5rem;
           justify-items: stretch;
           align-items: stretch;
@@ -66,7 +66,7 @@
               background: linear-gradient(
                 180deg,
                 rgba(46, 46, 46, 0.6) 0%,
-                rgba(196, 196, 196, 0) 100%
+                rgba(196, 196, 196, 0.1) 100%
               );
             }
             svg {

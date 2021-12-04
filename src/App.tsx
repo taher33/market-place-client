@@ -38,6 +38,7 @@ function App(): JSX.Element {
           if (res.status === "error") return console.log(res.data);
         });
       },
+      onError: () => null,
     }
   );
   return (

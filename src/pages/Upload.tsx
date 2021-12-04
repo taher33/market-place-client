@@ -1,10 +1,12 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import SidebarFeed from "../components/SidebarFeed";
 import { BiAddToQueue } from "react-icons/bi";
 import { TiDeleteOutline } from "react-icons/ti";
 
 import styles from "../styles/upload.module.scss";
+import { useMutation } from "react-query";
+import { axios_instance } from "../utils/axios";
 
 interface Props {}
 interface Form {
@@ -18,17 +20,39 @@ interface Form {
 }
 
 export default function Upload({}: Props): ReactElement {
-  const { handleSubmit, register, watch } = useForm<Form>();
+  const { handleSubmit, register, control } = useForm<Form>();
+  const pics = useWatch({
+    name: "picture",
+    control,
+    defaultValue: {},
+  });
 
-  const pictures = watch("picture", {});
-  let files = Object.values(pictures) as any;
+  const { mutate } = useMutation((data: any) => {
+    const fd = new FormData();
 
+    for (let key in data) {
+      if (key === "picture") {
+        for (let file of data[key]) {
+          fd.append(key, file);
+        }
+      } else {
+        fd.append(key, data[key]);
+      }
+    }
+    return axios_instance(true)({
+      url: "/products",
+      method: "post",
+      data: fd,
+    });
+  });
   const createProduct = (data: any) => {
-    console.log(data);
+    mutate(data);
   };
+
   const deletePic = (data: any) => {
-    console.log(data);
+    delete pics[data];
   };
+
   return (
     <div className={styles.container}>
       <aside>
@@ -46,14 +70,18 @@ export default function Upload({}: Props): ReactElement {
             <input type="text" {...register("description")} />
             <label htmlFor="categorie">categorie</label>
             <select {...register("categorie")}>
-              <option value="Chocolate">choco</option>
-              <option value="Chocolate">choco</option>
-              <option value="Chocolate">choco</option>
+              <option value="electronics">electronics</option>
+              <option value="beauty">beauty</option>
+              <option value="cloths">cloths</option>
+              <option value="books">books</option>
+              <option value="sports">sports</option>
             </select>
             <label htmlFor="condition">condition</label>
             <select {...register("condition")}>
-              <option value="Chocolate">choco</option>
-              <option value="Chocolate">choco</option>
+              <option value="new">new</option>
+              <option value="good as new">good as new</option>
+              <option value="used">used</option>
+              <option value="bad">bad</option>
             </select>
             <label htmlFor="price">price</label>
             <input type="number" {...register("price")} />
@@ -62,11 +90,11 @@ export default function Upload({}: Props): ReactElement {
           </div>
           <div className={styles.imageWrapper}>
             <div className={styles.imgPrv}>
-              {!!files &&
-                files.map((el: any) => (
-                  <div className={styles.container}>
+              {!!pics["0"] &&
+                Object.values(pics).map((el: any, id: any) => (
+                  <div key={id} className={styles.container}>
                     <div className={styles.overlay}></div>
-                    <TiDeleteOutline onClick={() => deletePic(el)} />
+                    {/* <TiDeleteOutline onClick={() => deletePic(id)} /> */}
                     <img src={URL.createObjectURL(el)} alt={el.name} />
                   </div>
                 ))}
