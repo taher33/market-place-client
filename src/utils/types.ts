@@ -6,6 +6,17 @@ export interface Messages {
   reciever: string;
   content: string;
 }
+
+export interface ChatUser {
+  profileImg?: String;
+  People_I_follow: [string];
+  People_that_follow_me: [string];
+  email: string;
+  _id: string;
+  name: string;
+  notification: boolean;
+  connected: boolean;
+}
 export interface User {
   profileImg?: String;
   People_I_follow: [string];
@@ -13,7 +24,6 @@ export interface User {
   email: string;
   _id: string;
   name: string;
-  lastMessage?: "";
 }
 export interface Product {
   condition: String;

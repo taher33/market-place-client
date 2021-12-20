@@ -1,6 +1,7 @@
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { ReactElement, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { ChatPeople } from "../components/chatpeople";
@@ -8,8 +9,9 @@ import Message from "../components/message";
 import SidebarFeed from "../components/SidebarFeed";
 import styles from "../styles/chat.module.scss";
 import { useAppContext } from "../utils/context";
-import { Messages, User } from "../utils/types";
+import { ChatUser, Messages, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
+import { axios_instance } from "../utils/axios";
 
 interface Props {}
 interface MessageForm {
@@ -19,14 +21,14 @@ function Chat({}: Props): ReactElement {
   const { user, socket } = useAppContext();
 
   const { handleSubmit, register, reset } = useForm<MessageForm>();
-
   const query = getQueryParams();
   const reciever = query.get("id");
 
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
-  const [connectedUsers, setConnectedUsers] = useState<User[]>();
+  const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
+
   useEffect(() => {
     let isSubscibed = true;
     socket.on("private message", (msg: Messages) => {
@@ -46,9 +48,21 @@ function Chat({}: Props): ReactElement {
     let payload = {
       _id: user._id,
     };
-    socket.emit("get connected users", payload, ({ status, users }: any) => {
-      setConnectedUsers(users);
-    });
+    socket.emit(
+      "get connected users",
+      payload,
+      ({ status, users, Connectedusers }: any) => {
+        Connectedusers.forEach((socketUser: ChatUser) => {
+          users?.forEach((el: ChatUser) => {
+            if (socketUser._id === el._id || el.connected) {
+              el.connected = true;
+            } else el.connected = false;
+          });
+        });
+        setConnectedUsers(users);
+        console.log(users, Connectedusers);
+      }
+    );
   }, [socket, user._id]);
 
   useEffect(() => {
@@ -139,9 +153,10 @@ function Chat({}: Props): ReactElement {
                 }`}
               >
                 <img src="food.jpg" alt="user" />
-                <div>
+                <div className={User.connected ? styles.connectedUser : ""}>
                   <h5>{User.name}</h5>
                   <p>last message</p>
+                  {User.notification && <p>notification</p>}
                 </div>
               </div>
             </Link>

@@ -148,3 +148,17 @@
     outline: white 2px solid;
   }
 }
+
+.connectedUser {
+  position: relative;
+  &::before {
+    content: "";
+    height: 10px;
+    width: 10px;
+    border-radius: 99rem;
+    background-color: rgb(32, 226, 64);
+    position: absolute;
+    top: 0;
+    left: -20px;
+  }
+}

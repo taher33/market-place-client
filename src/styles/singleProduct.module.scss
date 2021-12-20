@@ -140,7 +140,7 @@
     margin-left: auto;
     margin-right: auto;
     .productWrapper {
-      grid-template-columns: auto 1fr;
+      grid-template-columns: 1fr 1fr;
       grid-template-rows: auto;
       grid-column-gap: 3rem;
       grid-row-gap: 20px;
