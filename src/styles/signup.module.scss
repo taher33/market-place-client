@@ -1,3 +1,5 @@
+@import "variables.scss";
+
 .container {
   display: flex;
   align-items: center;
@@ -19,7 +21,7 @@
     a {
       opacity: 100%;
       text-decoration: none;
-      color: blueviolet;
+      color: $primary-color;
       font-weight: 600;
     }
   }
@@ -51,7 +53,7 @@
       border: none;
       padding: 1rem 3rem;
       cursor: pointer;
-      background-color: blueviolet;
+      background-color: $primary-color;
       font-size: 20px;
       font-weight: 600;
       color: white;

@@ -1,7 +1,8 @@
+@import "variables.scss";
+
 .container {
   height: calc(100vh - 170px);
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  padding: $padding-phone;
   // display: grid;
   // grid-template-columns: 1fr;
   // grid-template-rows: 1fr;
@@ -41,12 +42,12 @@
       background-color: rgb(255, 255, 255);
     }
     ::-webkit-scrollbar-track {
-      width: 0.3rem;
+      width: 0.1rem;
       background-color: rgba(224, 10, 10, 0);
     }
     ::-webkit-scrollbar-thumb {
-      width: 0.3rem;
-      background-color: rgb(86, 50, 121);
+      width: 0.1rem;
+      background-color: rgb(23, 23, 24);
       border-radius: 900rem;
       transition: background-color 5s ease;
     }
@@ -62,14 +63,14 @@
         padding: 0.6rem 1rem;
         border-radius: 0.6rem;
         outline: none;
-        border: blueviolet 1px solid;
+        border: $primary-color 1px solid;
       }
       button {
         font-family: "inter";
         color: white;
         border: none;
         outline: none;
-        background-color: blueviolet;
+        background-color: $primary-color;
         cursor: pointer;
         border-radius: 1rem;
         padding: 0.3rem 1rem;
@@ -83,7 +84,7 @@
 
     display: grid;
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: 1fr;
+    // grid-template-rows: 1fr;
     grid-column-gap: 0.5rem;
     grid-row-gap: 20px;
     justify-content: stretch;
@@ -130,8 +131,9 @@
 
 @media (min-width: 1024px) {
   .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    max-width: $max-container-width;
+    margin: 0 auto;
+
     grid-template-columns: 1fr 2.5fr 1fr;
     aside {
       display: block;
@@ -141,7 +143,7 @@
 
 .selected {
   color: white;
-  background-color: blueviolet;
+  background-color: $primary-color;
   padding: 1rem 1rem;
   border-radius: 900rem;
   img {

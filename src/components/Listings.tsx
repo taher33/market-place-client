@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom";
 import styles from "../styles/listings.module.scss";
 import { useQuery } from "react-query";
 import { axios_instance } from "../utils/axios";
+import FullPageLoader from "./fullPageLoader";
 
 interface Props {
   name: String;
@@ -43,8 +44,13 @@ function Listings({ name, seeMore }: Props): ReactElement {
       url: "/products?categorie=cloths",
     })
   );
-  if (isLoading) return <h2>loading</h2>;
-  if (isError) return <h2 style={{ color: "red" }}>error</h2>;
+  if (isLoading)
+    return (
+      <div className={styles.loader}>
+        <FullPageLoader />
+      </div>
+    );
+
   return (
     <div className={styles.container}>
       <div className={styles.title}>
@@ -52,21 +58,29 @@ function Listings({ name, seeMore }: Props): ReactElement {
         <Link to="#">{seeMore && <span>see all</span>}</Link>
       </div>
       <div className={styles.itemsWrapper}>
-        {data?.data.products.map((product: Product) => (
-          <div key={product._id} className={styles.item}>
-            <img
-              src={product.pictures[0]}
-              alt="item"
-              onClick={() => {
-                router.replace("/product?id=" + product._id);
-              }}
-            />
-            <div className={styles.details}>
-              <p>{product.description}</p>
-              <h3>{product.price} USD</h3>
-            </div>
+        {isLoading ? (
+          <div className={styles.loader}>
+            <FullPageLoader />
           </div>
-        ))}
+        ) : isError ? (
+          <h2 style={{ color: "red" }}>error</h2>
+        ) : (
+          data?.data.products.map((product: Product) => (
+            <div key={product._id} className={styles.item}>
+              <img
+                src={product.pictures[0]}
+                alt="item"
+                onClick={() => {
+                  router.replace("/product?id=" + product._id);
+                }}
+              />
+              <div className={styles.details}>
+                <p>{product.description}</p>
+                <h3>{product.price} USD</h3>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

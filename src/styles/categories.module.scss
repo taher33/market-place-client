@@ -1,8 +1,12 @@
+@import "variables.scss";
+
 .container {
+  padding: $padding-phone;
   aside {
     display: none;
   }
   main {
+    padding: $padding-phone;
     ::-webkit-scrollbar {
       display: none;
     }
@@ -11,6 +15,11 @@
     }
     ::-webkit-scrollbar-thumb {
       display: none;
+    }
+    .loader {
+      display: flex;
+      justify-content: center;
+      margin-top: 3rem;
     }
     .categories {
       padding-top: 1.5rem;
@@ -23,7 +32,7 @@
         font-weight: 300;
         text-decoration: none;
         color: black;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.6rem;
         border-radius: 900rem;
 
         &:hover {
@@ -40,11 +49,13 @@
       align-items: stretch;
 
       .item {
+        margin-bottom: 2rem;
         img {
           width: 100%;
           height: 20rem;
           object-fit: cover;
           border-radius: 0.8rem;
+          cursor: pointer;
         }
 
         .details {
@@ -72,8 +83,19 @@
   }
 }
 
-@media (min-width: 786px) {
+@media (min-width: 768px) {
   .container {
+    main {
+      .listings {
+        grid-column-gap: 1rem;
+      }
+    }
+  }
+}
+@media (min-width: 1024px) {
+  .container {
+    max-width: $max-container-width;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: auto 1fr;
     grid-column-gap: 1rem;

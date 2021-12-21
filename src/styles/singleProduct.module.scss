@@ -1,3 +1,10 @@
+@import "variables.scss";
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+}
 .container {
   padding: 1rem;
   .productWrapper {
@@ -18,7 +25,7 @@
 
     .textWrapper {
       h3 {
-        color: blueviolet;
+        color: $primary-color;
         font-weight: 600;
       }
 
@@ -34,21 +41,21 @@
 
         input {
           font-family: "Inter";
-          font-size: 18px;
+          font-size: 1.1px;
           border-radius: 0.5rem;
           padding: 0.6rem 1rem;
-          border: blueviolet 1px solid;
+          border: $primary-color 1px solid;
           width: 100%;
         }
         button {
-          background-color: blueviolet;
+          background-color: $primary-color;
           cursor: pointer;
           color: white;
           border: none;
           border-radius: 0.5rem;
           margin-left: 2rem;
           outline: none;
-          font-weight: bold;
+          font-weight: 500;
           font-size: 1rem;
           font-family: "Inter";
           width: 4rem;
@@ -65,7 +72,7 @@
           text-transform: capitalize;
         }
         span {
-          color: blueviolet;
+          color: $primary-color;
           text-decoration: underline;
         }
       }
@@ -152,49 +159,47 @@
           font-size: 30px;
         }
         h3 {
-          font-size: 25px;
+          font-size: 20px;
         }
         p {
-          font-size: 25px;
+          font-size: 20px;
         }
 
         form {
           margin-top: 2rem;
           input {
-            font-size: 24px;
+            font-size: 20px;
           }
           button {
-            width: 140px;
-            font-size: 24px;
+            width: 5rem;
+            font-size: 20px;
           }
         }
         .sellerInfo {
           h4 {
-            font-size: 30px;
+            font-size: 1.5rem;
           }
           span {
-            font-size: 24px;
+            font-size: 1rem;
           }
         }
         .user {
           img {
             width: 100px;
             height: 100px;
+            border-radius: 90rem;
           }
           p,
           span {
-            font-size: 24px;
+            font-size: 1.1rem;
           }
         }
         .dateSince {
           margin-top: 2rem;
-          font-size: 27px;
+          font-size: 1.1rem;
         }
         h4 {
-          font-size: 30px;
-        }
-        h4 {
-          font-size: 30px;
+          font-size: 1.5rem;
         }
       }
     }

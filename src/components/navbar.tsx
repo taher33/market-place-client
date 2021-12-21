@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 import { Link } from "react-router-dom";
 
-import { BsSearch } from "react-icons/bs";
+import { GrSearch } from "react-icons/gr";
 import { BiMenu } from "react-icons/bi";
 import styles from "../styles/navbar.module.scss";
 
@@ -14,9 +14,9 @@ function Navbar({}: Props): ReactElement {
         <img src="logo.png" alt="logo" />
       </Link>
       <div className={styles.searchBar}>
-        <input type="text" />
+        <input type="search" />
         <button>
-          <BsSearch />
+          <GrSearch />
         </button>
       </div>
       <div className={styles.links}>

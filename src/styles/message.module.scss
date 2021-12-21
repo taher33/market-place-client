@@ -1,10 +1,12 @@
+@import "variables.scss";
+
 .container {
   max-width: 80%;
   width: fit-content;
 
   margin-left: auto;
   margin-bottom: 0.5rem;
-  background-color: blueviolet;
+  background-color: $primary-color;
   padding: 0.4rem 0.4rem 0.4rem 0.6rem;
   border-radius: 0.8rem 0.4rem 0 0.8rem;
 

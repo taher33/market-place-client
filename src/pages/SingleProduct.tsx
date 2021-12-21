@@ -2,9 +2,10 @@ import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { useQuery as useParams } from "../utils/usequery";
 import { useQuery } from "react-query";
 import Listings from "../components/Listings";
+import { axios_instance } from "../utils/axios";
 
 import styles from "../styles/singleProduct.module.scss";
-import { axios_instance } from "../utils/axios";
+import FullPageLoader from "../components/fullPageLoader";
 
 interface Props {}
 
@@ -36,16 +37,21 @@ interface Product {
 function SingleProduct({}: Props): ReactElement {
   const query = useParams();
   const id = query.get("id");
-  const { data, isLoading, isError } = useQuery("product", () =>
+  const { data, isLoading, isError } = useQuery(["product", id], () =>
     axios_instance(true)({
       method: "GET",
       url: "/products/singleProduct?_id=" + id,
     })
   );
   const product = data?.data.product as Product;
-  console.log(product);
+  console.log(isLoading);
 
-  if (isLoading) return <h2>loading</h2>;
+  if (isLoading)
+    return (
+      <div className={styles.loader}>
+        <FullPageLoader />
+      </div>
+    );
   if (isError) return <h2 style={{ color: "red" }}>error</h2>;
   return (
     <div className={styles.container}>

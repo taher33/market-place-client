@@ -40,15 +40,29 @@ function Profile({}: Props): ReactElement {
           <img src="food.jpg" alt="user" />
           <div className={styles.details}>
             <div className={styles.header}>
-              <h2>UserName</h2>
-              <button>message</button>
+              <h2>Robert jenson</h2>
+              {me && <button>edit profile</button>}
               {!me && <button onClick={followUser}>follow</button>}
-              <FiMoreHorizontal />
+              {!me && <button onClick={followUser}>message</button>}
+              <button>
+                <FiMoreHorizontal />
+              </button>
+            </div>
+            <div className={styles.stats}>
+              <p>2 products</p>
+              <p>5 followers</p>
             </div>
             <div className={styles.about}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis,
               nihil. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
               Maiores, molestias.
+            </div>
+            <div className={styles.phoneActions}>
+              <button>follow</button>
+              <button>message</button>
+              <button>
+                <FiMoreHorizontal />
+              </button>
             </div>
           </div>
         </div>

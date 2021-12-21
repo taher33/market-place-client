@@ -10,27 +10,10 @@ function Main({}: Props): ReactElement {
   return (
     <>
       <div className={styles.container}>
-        <div className={styles.sideBar}>
+        <aside>
           <SidebarFeed />
-        </div>
+        </aside>
         <div className={styles.main}>
-          {/* <section>
-            <h2>Categories</h2>
-            <div className={styles.categories}>
-              <div>
-                <img src="/book.png" alt="book" />
-                <p>books</p>
-              </div>
-              <div>
-                <img src="/fashion.png" alt="book" />
-                <p>books</p>
-              </div>
-              <div>
-                <img src="/gamepad.png" alt="book" />
-                <p>books</p>
-              </div>
-            </div>
-          </section> */}
           <div className={styles.mainFeed}>
             <div className={styles.listings}>
               <Listings name="food" seeMore />

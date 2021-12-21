@@ -1,39 +1,9 @@
-.container {
-  .main {
-    max-width: 1450px;
+@import "variables.scss";
 
-    section {
-      ::-webkit-scrollbar {
-        height: 10px;
-      }
-      ::-webkit-scrollbar-track {
-        background-color: blue;
-        height: inherit;
-        border-radius: 90rem;
-      }
-      ::-webkit-scrollbar-thumb {
-        height: 5px;
-        border-radius: 90rem;
-        background-color: whitesmoke;
-      }
-      .categories {
-        overflow-x: scroll;
-        display: flex;
-        flex-wrap: nowrap;
-        div {
-          margin-right: 3rem;
-          display: inline-block;
-          text-align: center;
-          img {
-            height: 5rem;
-          }
-        }
-      }
-    }
-    padding: 1rem;
-    .sideBar {
-      display: none;
-    }
+.container {
+  padding: $padding-phone;
+  aside {
+    display: none;
   }
 }
 // display: grid;
@@ -65,16 +35,14 @@
 
 @media (min-width: 1024px) {
   .container {
+    max-width: $max-container-width;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: auto 1fr;
 
     grid-column-gap: 40px;
 
-    .main {
-      .hero {
-      }
-    }
-    .sideBar {
+    aside {
       position: -webkit-sticky;
       position: sticky;
       top: 90px;

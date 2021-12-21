@@ -16,6 +16,7 @@ import { useQuery } from "react-query";
 import { axios_instance } from "./utils/axios";
 import { Response } from "./utils/types";
 import Upload from "./pages/Upload";
+import FullPageLoader from "./components/fullPageLoader";
 
 const socket = io("http://localhost:8080/");
 

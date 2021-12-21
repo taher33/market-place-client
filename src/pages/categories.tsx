@@ -7,6 +7,7 @@ import SidebarFeed from "../components/SidebarFeed";
 import styles from "../styles/categories.module.scss";
 import { axios_instance } from "../utils/axios";
 import { Product } from "../utils/types";
+import FullPageLoader from "../components/fullPageLoader";
 
 interface Props {}
 
@@ -35,7 +36,9 @@ function Categories({}: Props): ReactElement {
           <Link to="?categorie=games">games</Link>
         </div>
         {isLoading ? (
-          <h2>loading</h2>
+          <div className={styles.loader}>
+            <FullPageLoader />
+          </div>
         ) : isError ? (
           <h2 style={{ color: "red" }}>error</h2>
         ) : (
