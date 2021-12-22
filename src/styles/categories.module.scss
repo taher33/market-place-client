@@ -48,6 +48,14 @@
       justify-items: stretch;
       align-items: stretch;
 
+      .errorState {
+        color: $error_color;
+        font-weight: 500;
+        font-size: 1.3rem;
+        span {
+          color: initial;
+        }
+      }
       .item {
         margin-bottom: 2rem;
         img {

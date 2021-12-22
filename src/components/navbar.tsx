@@ -1,13 +1,15 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { GrSearch } from "react-icons/gr";
 import { BiMenu } from "react-icons/bi";
 import styles from "../styles/navbar.module.scss";
+import { PhoneMenu } from "./phonemenu";
 
 interface Props {}
 
 function Navbar({}: Props): ReactElement {
+  const [show, setShow] = useState(false);
   return (
     <div className={styles.container}>
       <Link to="/">
@@ -24,7 +26,8 @@ function Navbar({}: Props): ReactElement {
         <Link to="/login">login</Link>
       </div>
       <div className={styles.svgMenu}>
-        <BiMenu />
+        <BiMenu onClick={() => setShow(!show)} />
+        {show && <PhoneMenu setShow={setShow} show={show} />}
       </div>
     </div>
   );

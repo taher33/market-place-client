@@ -13,15 +13,13 @@ function Main({}: Props): ReactElement {
         <aside>
           <SidebarFeed />
         </aside>
-        <div className={styles.main}>
-          <div className={styles.mainFeed}>
-            <div className={styles.listings}>
-              <Listings name="food" seeMore />
-              <Listings name="Cars" seeMore />
-              <Listings name="recomended" seeMore />
-            </div>
+        <main>
+          <div className={styles.listings}>
+            <Listings name="Featured" seeMore />
+            <Listings name="newest on the market" seeMore />
+            <Listings name="recomended" />
           </div>
-        </div>
+        </main>
       </div>
     </>
   );

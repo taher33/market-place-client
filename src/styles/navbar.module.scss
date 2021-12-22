@@ -14,6 +14,7 @@
   padding-left: $padding-phone;
   padding-right: $padding-phone;
   img {
+    z-index: 2002;
     cursor: pointer;
     height: inherit;
   }

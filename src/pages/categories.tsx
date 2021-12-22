@@ -40,7 +40,9 @@ function Categories({}: Props): ReactElement {
             <FullPageLoader />
           </div>
         ) : isError ? (
-          <h2 style={{ color: "red" }}>error</h2>
+          <h2 className={styles.errorState}>
+            sorry but something went wrong <span>🤕</span> please try reloading
+          </h2>
         ) : (
           <div className={styles.listings}>
             {data?.data.products.map((product: Product) => (

@@ -5,34 +5,11 @@ import styles from "../styles/listings.module.scss";
 import { useQuery } from "react-query";
 import { axios_instance } from "../utils/axios";
 import FullPageLoader from "./fullPageLoader";
+import { Product } from "../utils/types";
 
 interface Props {
   name: String;
   seeMore?: boolean;
-}
-
-interface User {
-  profileImg: String;
-  People_I_follow: [string];
-  People_that_follow_me: [string];
-  email: string;
-  _id: string;
-  name: string;
-}
-interface Product {
-  condition: String;
-  saves: number;
-  price: number;
-  stock: number;
-  pictures: [string];
-  createdAt: string;
-  rating: number;
-  _id: string;
-  description: string;
-  seller: User;
-  categorie: string;
-  details: string;
-  modifiedAt: string;
 }
 
 function Listings({ name, seeMore }: Props): ReactElement {
@@ -44,12 +21,6 @@ function Listings({ name, seeMore }: Props): ReactElement {
       url: "/products?categorie=cloths",
     })
   );
-  if (isLoading)
-    return (
-      <div className={styles.loader}>
-        <FullPageLoader />
-      </div>
-    );
 
   return (
     <div className={styles.container}>
@@ -63,7 +34,9 @@ function Listings({ name, seeMore }: Props): ReactElement {
             <FullPageLoader />
           </div>
         ) : isError ? (
-          <h2 style={{ color: "red" }}>error</h2>
+          <h2 className={styles.errorState}>
+            sorry but something went wrong <span>🤕</span> please try reloading
+          </h2>
         ) : (
           data?.data.products.map((product: Product) => (
             <div key={product._id} className={styles.item}>
