@@ -58,11 +58,10 @@ function Signup({}: Props): ReactElement {
           don't have an acount? create one here{"   "}
           <Link to="/signup">Sign up</Link>
         </p>
-        <span>{isError && error.response.data.message}</span>
         <form onSubmit={handleSubmit(submitForm)}>
           <label htmlFor="email">Email</label>
           <input
-            type="text"
+            type="email"
             {...register("email", {
               required: "please specify the name field",
               pattern: {
@@ -71,7 +70,11 @@ function Signup({}: Props): ReactElement {
               },
             })}
           />
-          <p>{formState.errors.email && formState.errors.email.message}</p>
+          {formState.errors.email && (
+            <span className={styles.formError}>
+              {formState.errors.email.message}
+            </span>
+          )}
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -83,11 +86,18 @@ function Signup({}: Props): ReactElement {
               },
             })}
           />
-          <p>
-            {formState.errors.password && formState.errors.password.message}
-          </p>
+
+          {formState.errors.password && (
+            <span className={styles.formError}>
+              {formState.errors.password.message}
+            </span>
+          )}
+
           <button type="submit">{isLoading ? "submiting" : "login"}</button>
         </form>
+        <span className={styles.apiError}>
+          {isError && error.response.data.message}
+        </span>
       </div>
       <img src="Delivery.png" alt="delivery" />
     </div>

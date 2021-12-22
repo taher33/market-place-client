@@ -10,16 +10,20 @@
     .userDesc {
       margin-top: 2rem;
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
       img {
         margin-right: 1rem;
-        height: 6rem;
+        height: 8rem;
+        width: 8rem;
         border-radius: 90rem;
         border: 1px solid #5a5a5a;
       }
       .details {
+        margin-top: 1rem;
         .header {
           h2 {
+            text-align: center;
             font-size: 1.2rem;
             margin: 0;
             margin-right: 1rem;
@@ -33,6 +37,7 @@
         }
         .stats {
           display: flex;
+          justify-content: center;
           p {
             margin-right: 1rem;
             font-weight: 400;
@@ -40,10 +45,13 @@
           }
         }
         .about {
+          text-align: center;
+
           margin-top: 0.6rem;
           color: rgb(37, 37, 37);
           font-size: 0.9rem;
           font-weight: 300;
+          line-height: 20.55px;
         }
         .phoneActions {
           margin-top: 0.6rem;
@@ -113,6 +121,9 @@
   .container {
     .profileWrapper {
       .userDesc {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: row;
         img {
           height: 8rem;
           margin-right: 1rem;
@@ -121,6 +132,7 @@
           .header {
             display: flex;
             h2 {
+              text-align: left;
               font-size: 1.5rem;
               margin-right: auto;
             }
@@ -137,9 +149,13 @@
             }
           }
           .stats {
+            justify-content: left;
             font-size: 1.1rem;
           }
           .about {
+            text-align: left;
+
+            line-height: 26.55px;
             font-size: 1rem;
             max-width: 50rem;
           }
@@ -167,6 +183,7 @@
       .userDesc {
         img {
           height: 10rem;
+          width: 10rem;
           margin-right: 2rem;
         }
         .details {
@@ -181,7 +198,6 @@
           .about {
             margin-top: 1.5rem;
             font-size: 1.05rem;
-            max-width: 40rem;
           }
         }
       }

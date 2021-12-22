@@ -2,7 +2,7 @@
 
 .container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 1rem;
   h2 {
@@ -25,12 +25,23 @@
       font-weight: 600;
     }
   }
-
+  .apiError {
+    color: $error_color;
+    display: block;
+    margin-top: 1rem;
+  }
   form {
+    .formError {
+      font-size: 1rem;
+      color: $error_color;
+      display: block;
+      margin: 1rem 0;
+    }
     label {
       opacity: 75%;
       font-size: 1rem;
       font-weight: 300;
+      display: block;
     }
     input {
       margin-bottom: 2rem;
@@ -49,6 +60,7 @@
     }
 
     button {
+      display: block;
       font-family: "Inter";
       border: none;
       padding: 1rem 3rem;
