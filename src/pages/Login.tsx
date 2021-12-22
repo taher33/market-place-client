@@ -53,9 +53,9 @@ function Signup({}: Props): ReactElement {
   return (
     <div className={styles.container}>
       <div>
-        <h2>Get </h2>
+        <h2>Welcome back</h2>
         <p>
-          and get access to millions of clients -or-{"   "}
+          don't have an acount? create one here{"   "}
           <Link to="/signup">Sign up</Link>
         </p>
         <span>{isError && error.response.data.message}</span>

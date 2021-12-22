@@ -12,7 +12,7 @@ function Navbar({}: Props): ReactElement {
   const [show, setShow] = useState(false);
   return (
     <div className={styles.container}>
-      <Link to="/">
+      <Link to="/" onClick={() => setShow(false)}>
         <img src="logo.png" alt="logo" />
       </Link>
       <div className={styles.searchBar}>

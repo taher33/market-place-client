@@ -18,7 +18,7 @@ function Listings({ name, seeMore }: Props): ReactElement {
   const { data, isError, isLoading } = useQuery("products", () =>
     axios_instance(true)({
       method: "GET",
-      url: "/products?categorie=cloths",
+      url: "/products",
     })
   );
 
