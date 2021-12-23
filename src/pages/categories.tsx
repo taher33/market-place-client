@@ -8,15 +8,18 @@ import styles from "../styles/categories.module.scss";
 import { axios_instance } from "../utils/axios";
 import { Product } from "../utils/types";
 import FullPageLoader from "../components/fullPageLoader";
+import { useForm } from "react-hook-form";
 
 interface Props {}
 
 function Categories({}: Props): ReactElement {
   const router = useHistory();
   const query = getQueryParams().toString();
+  const { register, watch } = useForm();
+  const select = watch("select");
 
   const { data, isLoading, isError } = useQuery(
-    ["products", query.toString()],
+    ["products", query.toString(), select],
     () =>
       axios_instance(true)({
         method: "GET",
@@ -29,11 +32,21 @@ function Categories({}: Props): ReactElement {
         <SidebarFeed />
       </aside>
       <main>
-        <div className={styles.categories}>
-          <Link to="?categorie=cloths">cloths</Link>
-          <Link to="?categorie=beauty">beauty</Link>
-          <Link to="?categorie=sports">sports</Link>
-          <Link to="?categorie=games">games</Link>
+        <div className={styles.options}>
+          <div className={styles.dropDown}>
+            <select {...register("select")}>
+              <option value="following">following</option>
+              <option value="new">new</option>
+              <option value="popular">popular</option>
+            </select>
+          </div>
+          <div className={styles.categories}>
+            <Link to="/categories">all</Link>
+            <Link to="?categorie=cloths">cloths</Link>
+            <Link to="?categorie=beauty">beauty</Link>
+            <Link to="?categorie=sports">sports</Link>
+            <Link to="?categorie=games">games</Link>
+          </div>
         </div>
         {isLoading ? (
           <div className={styles.loader}>

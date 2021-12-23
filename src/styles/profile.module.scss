@@ -125,7 +125,8 @@
         align-items: flex-start;
         flex-direction: row;
         img {
-          height: 8rem;
+          height: 10rem;
+          width: 10rem;
           margin-right: 1rem;
         }
         .details {
@@ -150,7 +151,9 @@
           }
           .stats {
             justify-content: left;
-            font-size: 1.1rem;
+            p {
+              font-size: 1rem;
+            }
           }
           .about {
             text-align: left;
@@ -182,8 +185,8 @@
       margin-top: 2rem;
       .userDesc {
         img {
-          height: 10rem;
-          width: 10rem;
+          height: 14rem;
+          width: 14rem;
           margin-right: 2rem;
         }
         .details {
