@@ -23,7 +23,7 @@ function Categories({}: Props): ReactElement {
     () =>
       axios_instance(true)({
         method: "GET",
-        url: "products?" + query,
+        url: "products?" + select + "=true" + query,
       })
   );
   return (
