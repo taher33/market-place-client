@@ -12,6 +12,7 @@ import { useAppContext } from "../utils/context";
 import { ChatUser, Messages, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
 import { axios_instance } from "../utils/axios";
+import { BiGridSmall } from "react-icons/bi";
 
 interface Props {}
 interface MessageForm {
@@ -106,17 +107,21 @@ function Chat({}: Props): ReactElement {
         <SidebarFeed />
       </aside>
       <div className={styles.peoplePhone}>
-        {!showUsers && (
-          <div className={styles.selectedUser}>
-            <FontAwesomeIcon
-              icon={faComment}
-              onClick={() => setShowUsers(true)}
-            />
-            <p>maher</p>
-          </div>
+        <div className={styles.selectUser}>
+          <button onClick={() => setShowUsers(!showUsers)}>
+            <BiGridSmall />
+          </button>
+          <p>chat</p>
+        </div>
+        {showUsers && (
+          <ChatPeople
+            ChatUsers={connectedUsers}
+            show={showUsers}
+            setShow={setShowUsers}
+          />
         )}
-        {showUsers && <ChatPeople show={showUsers} setShow={setShowUsers} />}
       </div>
+      <div className={styles.lineBreak}></div>
       <div className={styles.mainChat}>
         <div className={styles.messagesWrapper}>
           {messages &&
@@ -140,7 +145,7 @@ function Chat({}: Props): ReactElement {
         </div>
       </div>
       <div className={styles.people}>
-        <h2>recent</h2>
+        <h3>recent</h3>
         {connectedUsers &&
           connectedUsers.map((User) => (
             <Link key={User._id} to={"/chat?id=" + User._id}>
