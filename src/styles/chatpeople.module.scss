@@ -7,7 +7,6 @@
   height: 100vh;
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.301);
-  z-index: 100;
 
   .sidebar {
     background-color: white;
@@ -22,7 +21,7 @@
       .user {
         display: flex;
         margin-top: 1rem;
-        align-items: flex-start;
+        align-items: center;
         transition: all 0.3s ease-in-out;
         margin-bottom: 2rem;
         h5 {
@@ -32,12 +31,9 @@
           font-weight: 600;
           margin-bottom: 0.1rem;
         }
-        p {
-          margin: 0;
-          font-weight: 600;
-          margin-left: 0;
-          font-weight: 300;
-          font-size: 1rem;
+        svg {
+          font-size: 2rem;
+          margin-left: auto;
         }
         img {
           margin-right: 1rem;

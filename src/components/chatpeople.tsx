@@ -1,4 +1,4 @@
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -38,30 +38,6 @@ interface UserProps {
   user: ChatUser;
 }
 
-// export function User({
-//   id,
-//   setSelected,
-//   selectedId,
-//   setShow,
-// }: UserProps): JSX.Element {
-//   // const isSelected = id === selectedId;
-//   return (
-//     <div
-//       key={id}
-//       className={`${styles.user} `}
-//       onClick={() => {
-//         setSelected(id);
-//         setShow!(false);
-//       }}
-//     >
-//       <img src="food.jpg" alt="user" />
-//       <div>
-//         <h5>john doe</h5>
-//         <p>last message</p>
-//       </div>
-//     </div>
-//   );
-// }
 export function User({
   setSelected,
   selectedId,
@@ -82,9 +58,10 @@ export function User({
         <img src="food.jpg" alt="user" />
         <div className={user.connected ? styles.connectedUser : ""}>
           <h5>{user.name}</h5>
-          <p>last message</p>
+
           {user.notification && <p>notification</p>}
         </div>
+        <HiOutlineDotsHorizontal />
       </div>
     </Link>
   );

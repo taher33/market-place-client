@@ -12,7 +12,7 @@ import { useAppContext } from "../utils/context";
 import { ChatUser, Messages, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
 import { axios_instance } from "../utils/axios";
-import { BiGridSmall } from "react-icons/bi";
+import { BiArrowBack, BiGridSmall } from "react-icons/bi";
 
 interface Props {}
 interface MessageForm {
@@ -109,9 +109,9 @@ function Chat({}: Props): ReactElement {
       <div className={styles.peoplePhone}>
         <div className={styles.selectUser}>
           <button onClick={() => setShowUsers(!showUsers)}>
-            <BiGridSmall />
+            <BiArrowBack />
           </button>
-          <p>chat</p>
+          ✨<p>chat</p>
         </div>
         {showUsers && (
           <ChatPeople
