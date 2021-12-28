@@ -16,9 +16,11 @@ import { useQuery } from "react-query";
 import { axios_instance } from "./utils/axios";
 import { Response } from "./utils/types";
 import Upload from "./pages/Upload";
-import FullPageLoader from "./components/fullPageLoader";
 
-const socket = io("http://localhost:8080/");
+const socket =
+  process.env.NODE_ENV === "development"
+    ? io("http://localhost:8080/")
+    : io(process.env.REACT_APP_CHAT_ENDPOINT_PROD);
 
 function App(): JSX.Element {
   const [user, setUser] = useState({} as any);
