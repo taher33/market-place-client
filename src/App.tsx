@@ -20,7 +20,7 @@ import Upload from "./pages/Upload";
 const socket =
   process.env.NODE_ENV === "development"
     ? io("http://localhost:8080/")
-    : io(process.env.REACT_APP_CHAT_ENDPOINT_PROD);
+    : io(process.env.REACT_APP_CHAT_ENDPOINT_PROD!);
 
 function App(): JSX.Element {
   const [user, setUser] = useState({} as any);
