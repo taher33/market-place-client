@@ -24,7 +24,7 @@ const socket =
 
 function App(): JSX.Element {
   const [user, setUser] = useState({} as any);
-  useQuery(
+  const { isLoading } = useQuery(
     "login",
     () =>
       axios_instance(true)({
@@ -41,7 +41,7 @@ function App(): JSX.Element {
           if (res.status === "error") return console.log(res.data);
         });
       },
-      onError: () => null,
+      onError: () => {},
     }
   );
   return (
@@ -54,7 +54,7 @@ function App(): JSX.Element {
           <Route path="/" exact>
             <Landing />
           </Route>
-          <ProtectRoute path="/profile">
+          <ProtectRoute loading={isLoading} path="/profile">
             <Profile />
           </ProtectRoute>
           <Route path="/upload">
@@ -66,7 +66,7 @@ function App(): JSX.Element {
           <Route path="/product">
             <SingleProduct />
           </Route>
-          <ProtectRoute path="/chat">
+          <ProtectRoute loading={isLoading} path="/chat">
             <Chat />
           </ProtectRoute>
           <Route path="/categories">

@@ -13,21 +13,33 @@ interface Props {}
 
 function Profile({}: Props): ReactElement {
   const userId = getQuery().get("id");
-  const followUser = () => {
-    console.log(me);
+
+  const followUser = async () => {
+    followQuery.mutate();
   };
+
   const { user } = useAppContext();
   const me = user._id === userId;
+
+  const profile = useQuery(["profile"], () =>
+    axios_instance(true)({
+      method: "GET",
+      url: "users/" + userId,
+    })
+  );
+
   const { data, isLoading, isError } = useQuery(["products"], () =>
     axios_instance(true)({
       method: "GET",
       url: "products",
     })
   );
+  console.log(profile.data?.data);
   const followQuery = useMutation(["follow"], () =>
     axios_instance(true)({
-      method: "POST",
-      url: "users",
+      method: "PATCH",
+      url: "users/follow",
+      data: { email: profile.data?.data.user.email },
     })
   );
   return (
@@ -43,7 +55,7 @@ function Profile({}: Props): ReactElement {
               <h2>Robert jenson</h2>
               {me && <button>edit profile</button>}
               {!me && <button onClick={followUser}>follow</button>}
-              {!me && <button onClick={followUser}>message</button>}
+              {!me && <button>message</button>}
               <button>
                 <FiMoreHorizontal />
               </button>
@@ -58,8 +70,8 @@ function Profile({}: Props): ReactElement {
               Maiores, molestias.
             </div>
             <div className={styles.phoneActions}>
-              <button>follow</button>
-              <button>message</button>
+              {!me && <button onClick={followUser}>follow</button>}
+              {!me && <button>message</button>}
               <button>
                 <FiMoreHorizontal />
               </button>

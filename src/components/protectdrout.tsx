@@ -1,21 +1,30 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { useAppContext } from "../utils/context";
+import FullPageLoader from "./fullPageLoader";
 
 interface Props {
   children: React.ReactElement;
+  loading: boolean;
   path: string;
   exact?: boolean;
 }
 
-const ProtectRoute = ({ children, ...rest }: Props) => {
+const ProtectRoute = ({ children, loading, ...rest }: Props) => {
   const { user } = useAppContext();
+
   const isLogedIn = user._id ? true : false;
   return (
     <Route
       {...rest}
       render={() =>
-        isLogedIn ? children : <Redirect to={{ pathname: "/login" }} />
+        loading ? (
+          <FullPageLoader />
+        ) : isLogedIn ? (
+          children
+        ) : (
+          <Redirect to={{ pathname: "/login" }} />
+        )
       }
     />
   );
