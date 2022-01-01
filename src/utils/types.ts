@@ -41,6 +41,15 @@ export interface Product {
   modifiedAt: string;
 }
 
+export interface Thread {
+  clients: ChatUser[];
+  messages: string[];
+  createdAt: string;
+  updatedAt: string;
+  connected: boolean;
+  _id: string;
+}
+
 export interface State {
   user: User;
   setUser: Dispatch<

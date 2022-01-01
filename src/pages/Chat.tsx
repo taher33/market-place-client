@@ -1,5 +1,3 @@
-import { faComment } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { ReactElement, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useForm } from "react-hook-form";
@@ -9,7 +7,7 @@ import Message from "../components/message";
 import SidebarFeed from "../components/SidebarFeed";
 import styles from "../styles/chat.module.scss";
 import { useAppContext } from "../utils/context";
-import { ChatUser, Messages, User } from "../utils/types";
+import { ChatUser, Messages, Thread, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
 import { axios_instance } from "../utils/axios";
 import { BiArrowBack, BiGridSmall } from "react-icons/bi";
@@ -17,6 +15,11 @@ import { BiArrowBack, BiGridSmall } from "react-icons/bi";
 interface Props {}
 interface MessageForm {
   content: string;
+}
+interface GetUsersType {
+  status: string;
+  Connectedusers: string[];
+  threads: Thread[];
 }
 function Chat({}: Props): ReactElement {
   const { user, socket } = useAppContext();
@@ -27,8 +30,8 @@ function Chat({}: Props): ReactElement {
 
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
-  const [connectedUsers, setConnectedUsers] = useState<ChatUser[]>([]);
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+  const [Threads, setThreads] = useState<Thread[]>([]);
+  const [selectedUser, setSelectedThread] = useState<string | null>(null);
 
   useEffect(() => {
     let isSubscibed = true;
@@ -52,16 +55,22 @@ function Chat({}: Props): ReactElement {
     socket.emit(
       "get connected users",
       payload,
-      ({ status, users, Connectedusers }: any) => {
-        Connectedusers.forEach((socketUser: ChatUser) => {
-          users?.forEach((el: ChatUser) => {
-            if (socketUser._id === el._id || el.connected) {
+      ({ status, threads, Connectedusers }: GetUsersType) => {
+        Connectedusers.forEach((socketUser) => {
+          threads?.forEach((el: Thread) => {
+            let partner;
+            if (el.clients[0]._id === user._id) partner = el.clients[1]._id;
+            else partner = el.clients[0]._id;
+            if (socketUser === partner || el.connected) {
               el.connected = true;
             } else el.connected = false;
           });
         });
-        setConnectedUsers(users);
-        console.log(users, Connectedusers);
+        threads.forEach((el) => {
+          if (el.clients[0]._id === user._id) el.clients = [el.clients[1]];
+          else el.clients = [el.clients[0]];
+        });
+        setThreads(threads);
       }
     );
   }, [socket, user._id]);
@@ -115,7 +124,7 @@ function Chat({}: Props): ReactElement {
         </div>
         {showUsers && (
           <ChatPeople
-            ChatUsers={connectedUsers}
+            ChatUsers={Threads}
             show={showUsers}
             setShow={setShowUsers}
           />
@@ -146,22 +155,21 @@ function Chat({}: Props): ReactElement {
       </div>
       <div className={styles.people}>
         <h3>recent</h3>
-        {connectedUsers &&
-          connectedUsers.map((User) => (
-            <Link key={User._id} to={"/chat?id=" + User._id}>
+        {Threads &&
+          Threads.map((thread) => (
+            <Link key={thread._id} to={"/chat?id=" + thread._id}>
               <div
                 onClick={() => {
-                  setSelectedUser(User._id);
+                  setSelectedThread(thread._id);
                 }}
                 className={`${styles.user} ${
-                  User._id === selectedUser ? styles.selected : null
+                  thread._id === selectedUser ? styles.selected : null
                 }`}
               >
                 <img src="food.jpg" alt="user" />
-                <div className={User.connected ? styles.connectedUser : ""}>
-                  <h5>{User.name}</h5>
+                <div className={thread.connected ? styles.connectedUser : ""}>
+                  <h5>{thread.clients[0].name}</h5>
                   <p>last message</p>
-                  {User.notification && <p>notification</p>}
                 </div>
               </div>
             </Link>

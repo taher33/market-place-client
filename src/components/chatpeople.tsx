@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import styles from "../styles/chatpeople.module.scss";
-import { ChatUser } from "../utils/types";
+import { ChatUser, Thread } from "../utils/types";
 
 interface Props {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  ChatUsers: ChatUser[];
+  ChatUsers: Thread[];
 }
 export function ChatPeople({ setShow, ChatUsers }: Props) {
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -22,7 +22,7 @@ export function ChatPeople({ setShow, ChatUsers }: Props) {
               key={user._id}
               selectedId={selectedUser}
               setSelected={setSelectedUser}
-              user={user}
+              user={user.clients[0]}
             />
           );
         })}
