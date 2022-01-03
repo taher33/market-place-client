@@ -5,6 +5,7 @@ export interface Messages {
   sender: string;
   reciever: string;
   content: string;
+  read: boolean;
 }
 
 export interface ChatUser {

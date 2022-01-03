@@ -26,7 +26,7 @@ function Chat({}: Props): ReactElement {
 
   const { handleSubmit, register, reset } = useForm<MessageForm>();
   const query = getQueryParams();
-  const reciever = query.get("id");
+  const thread = query.get("id");
 
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
@@ -35,18 +35,20 @@ function Chat({}: Props): ReactElement {
 
   useEffect(() => {
     let isSubscibed = true;
-    socket.on("private message", (msg: Messages) => {
-      if (msg.sender === reciever && isSubscibed) {
+    socket.on("private message", ({ msg, threadId }) => {
+      console.log("hello 1");
+      if (threadId === thread && isSubscibed) {
         let newMessages = [...messages];
         newMessages.push(msg);
         setMessages(newMessages);
       } else {
+        console.log(msg.content);
       }
     });
     return () => {
       isSubscibed = false;
     };
-  }, [messages, reciever, socket]);
+  }, [messages, thread, socket]);
 
   useEffect(() => {
     let payload = {
@@ -75,28 +77,32 @@ function Chat({}: Props): ReactElement {
     );
   }, [socket, user._id]);
 
+  const readMessages = (messages: Messages[]) => {
+    messages.filter((el) => el.read);
+  };
+
   useEffect(() => {
-    if (!user || !reciever) return;
+    if (!user || !thread) return;
     let payload = {
-      sender: user._id,
-      reciever,
+      threadId: thread,
     };
     socket.emit(
       "get previous messages",
       payload,
       ({ status, prevMessages, error }: any) => {
-        if (status === "error") console.log(error);
+        if (status === "error") return console.log(error);
         setMessages(prevMessages);
+        readMessages(prevMessages);
       }
     );
-  }, [reciever, socket, user, user._id]);
+  }, [thread, socket, user, user._id]);
 
   const SendMessage = async (data: MessageForm) => {
-    if (!reciever && !user) return;
+    if (!thread && !user) return;
     let payload = {
       content: data.content,
       sender: user._id,
-      reciever,
+      threadId: thread,
     };
     socket.emit(
       "private message",
