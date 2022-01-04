@@ -36,7 +36,6 @@ function Chat({}: Props): ReactElement {
   useEffect(() => {
     let isSubscibed = true;
     socket.on("private message", ({ msg, threadId }) => {
-      console.log("hello 1");
       if (threadId === thread && isSubscibed) {
         let newMessages = [...messages];
         newMessages.push(msg);
