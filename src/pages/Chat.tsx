@@ -144,6 +144,7 @@ function Chat({}: Props): ReactElement {
                 key={id}
                 content={message.content}
                 myMessage={user._id === message.sender}
+                lastMessage={id === messages.length - 1}
               />
             ))}
         </div>
