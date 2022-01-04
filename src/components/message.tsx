@@ -12,7 +12,7 @@ function Message({ myMessage, content, lastMessage }: Props): ReactElement {
   const tailMessage = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (lastMessage) tailMessage.current!.scrollIntoView();
-  }, []);
+  }, [lastMessage]);
   return (
     <div
       ref={tailMessage}

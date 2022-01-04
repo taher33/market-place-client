@@ -6,6 +6,8 @@ import { axios_instance } from "../utils/axios";
 
 import styles from "../styles/singleProduct.module.scss";
 import FullPageLoader from "../components/fullPageLoader";
+import { useAppContext } from "../utils/context";
+import { useForm } from "react-hook-form";
 
 interface Props {}
 
@@ -33,8 +35,16 @@ interface Product {
   details: string;
   modifiedAt: string;
 }
+interface Form {
+  content: string;
+}
 
 function SingleProduct({}: Props): ReactElement {
+  const { socket, user } = useAppContext();
+  const { register, handleSubmit } = useForm<Form>();
+  const [btnState, setbtnState] = useState<"error" | "submit" | "loading">(
+    "submit"
+  );
   const query = useParams();
   const id = query.get("id");
   const { data, isLoading, isError } = useQuery(["product", id], () =>
@@ -44,7 +54,18 @@ function SingleProduct({}: Props): ReactElement {
     })
   );
   const product = data?.data.product as Product;
-  console.log(isLoading);
+  const submitMessage = (data: Form) => {
+    setbtnState("loading");
+    const payload = {
+      sender: user._id,
+      content: data.content,
+      reciever: product.seller._id,
+    };
+    socket.emit("new private message", payload, (status: string) => {
+      if (status === "success") setbtnState("submit");
+      else setbtnState("error");
+    });
+  };
 
   if (isLoading)
     return (
@@ -60,15 +81,25 @@ function SingleProduct({}: Props): ReactElement {
         <div className={styles.textWrapper}>
           <h2>{product.description} </h2>
           <h3>{product.price} USD</h3>
-          <p>send a message to the seller</p>
-          <form>
-            <input
-              type="text"
-              name="message"
-              defaultValue="is this still available ?"
-            />
-            <button type="submit">send</button>
-          </form>
+          {product.seller._id !== user._id && (
+            <>
+              <p>send a message to the seller</p>
+              <form onSubmit={handleSubmit(submitMessage)}>
+                <input
+                  type="text"
+                  defaultValue="is this still available ?"
+                  {...register("content")}
+                />
+                <button type="submit" disabled={btnState === "loading"}>
+                  {btnState === "submit"
+                    ? "send"
+                    : btnState === "loading"
+                    ? "submitting"
+                    : "error"}
+                </button>
+              </form>
+            </>
+          )}
           <div className={styles.sellerInfo}>
             <h4>info about the seller </h4>
             <span>see profile</span>
