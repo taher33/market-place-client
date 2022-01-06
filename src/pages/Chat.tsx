@@ -57,8 +57,8 @@ function Chat({}: Props): ReactElement {
       "get connected users",
       payload,
       ({ status, threads, Connectedusers }: GetUsersType) => {
-        Connectedusers.forEach((socketUser) => {
-          threads?.forEach((el: Thread) => {
+        threads?.forEach((el: Thread) => {
+          Connectedusers.forEach((socketUser) => {
             let partner;
             if (el.clients[0]._id === user._id) partner = el.clients[1]._id;
             else partner = el.clients[0]._id;

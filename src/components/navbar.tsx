@@ -5,11 +5,13 @@ import { GrSearch } from "react-icons/gr";
 import { BiMenu } from "react-icons/bi";
 import styles from "../styles/navbar.module.scss";
 import { PhoneMenu } from "./phonemenu";
+import { useAppContext } from "../utils/context";
 
 interface Props {}
 
 function Navbar({}: Props): ReactElement {
   const [show, setShow] = useState(false);
+  const { user } = useAppContext();
   return (
     <div className={styles.container}>
       <Link to="/" onClick={() => setShow(false)}>
@@ -22,8 +24,17 @@ function Navbar({}: Props): ReactElement {
         </button>
       </div>
       <div className={styles.links}>
-        <Link to="/signup">sign up</Link>
-        <Link to="/login">login</Link>
+        {
+          //! remove this shit
+        }
+        {user.name ? (
+          <h3 style={{ margin: 0 }}>{user.name}</h3>
+        ) : (
+          <>
+            <Link to="/signup">sign up</Link>
+            <Link to="/login">login</Link>
+          </>
+        )}
       </div>
       <div className={styles.svgMenu}>
         <BiMenu onClick={() => setShow(!show)} />

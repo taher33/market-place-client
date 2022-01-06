@@ -54,6 +54,7 @@ function SingleProduct({}: Props): ReactElement {
     })
   );
   const product = data?.data.product as Product;
+
   const submitMessage = (data: Form) => {
     setbtnState("loading");
     const payload = {
