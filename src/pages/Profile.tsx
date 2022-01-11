@@ -31,10 +31,9 @@ function Profile({}: Props): ReactElement {
   const { data, isLoading, isError } = useQuery(["products"], () =>
     axios_instance(true)({
       method: "GET",
-      url: "products",
+      url: "products?seller=" + profile.data?.data.user._id,
     })
   );
-  console.log(profile.data?.data);
   const followQuery = useMutation(["follow"], () =>
     axios_instance(true)({
       method: "PATCH",
@@ -49,10 +48,10 @@ function Profile({}: Props): ReactElement {
       </aside>
       <div className={styles.profileWrapper}>
         <div className={styles.userDesc}>
-          <img src="food.jpg" alt="user" />
+          <img src={profile.data?.data.user.profileImg} alt="user" />
           <div className={styles.details}>
             <div className={styles.header}>
-              <h2>Robert jenson</h2>
+              <h2>{profile.data?.data.user.name} </h2>
               {me && <button>edit profile</button>}
               {!me && <button onClick={followUser}>follow</button>}
               {!me && <button>message</button>}
@@ -61,8 +60,9 @@ function Profile({}: Props): ReactElement {
               </button>
             </div>
             <div className={styles.stats}>
-              <p>2 products</p>
-              <p>5 followers</p>
+              <p>
+                {profile.data?.data.user.People_that_follow_me.length} followers
+              </p>
             </div>
             <div className={styles.about}>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis,
