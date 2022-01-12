@@ -10,8 +10,8 @@ export interface Messages {
 
 export interface ChatUser {
   profileImg?: String;
-  People_I_follow: [string];
-  People_that_follow_me: [string];
+  People_I_follow: string[];
+  People_that_follow_me: string[];
   email: string;
   _id: string;
   name: string;
@@ -19,9 +19,9 @@ export interface ChatUser {
   connected: boolean;
 }
 export interface User {
-  profileImg?: String;
-  People_I_follow: [string];
-  People_that_follow_me: [string];
+  profileImg?: string;
+  People_I_follow: string[];
+  People_that_follow_me: string[];
   email: string;
   _id: string;
   name: string;
@@ -31,7 +31,7 @@ export interface Product {
   saves: number;
   price: number;
   stock: number;
-  pictures: [string];
+  pictures: string[];
   createdAt: string;
   rating: number;
   _id: string;
@@ -60,8 +60,8 @@ export interface State {
           email: string;
           id: string;
           profileImg: string | undefined;
-          People_I_follow: [string];
-          People_that_follow_me: [string];
+          People_I_follow: string[];
+          People_that_follow_me: string[];
         }
       | undefined
     >

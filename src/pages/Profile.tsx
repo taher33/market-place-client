@@ -1,6 +1,7 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
+import EditProfile from "../components/editProfile";
 import SidebarFeed from "../components/SidebarFeed";
 
 import styles from "../styles/profile.module.scss";
@@ -13,6 +14,8 @@ interface Props {}
 
 function Profile({}: Props): ReactElement {
   const userId = getQuery().get("id");
+
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
 
   const followUser = async () => {
     followQuery.mutate();
@@ -52,8 +55,19 @@ function Profile({}: Props): ReactElement {
           <div className={styles.details}>
             <div className={styles.header}>
               <h2>{profile.data?.data.user.name} </h2>
-              {me && <button>edit profile</button>}
-              {!me && <button onClick={followUser}>follow</button>}
+              {me && (
+                <button onClick={() => setOpenEdit(true)}>edit profile</button>
+              )}
+              {openEdit && (
+                <EditProfile setShow={setOpenEdit} show={openEdit} />
+              )}
+              {!me && (
+                <button onClick={followUser}>
+                  {user.People_I_follow.includes(profile.data?.data.user._id)
+                    ? "unfollow"
+                    : "follow"}
+                </button>
+              )}
               {!me && <button>message</button>}
               <button>
                 <FiMoreHorizontal />

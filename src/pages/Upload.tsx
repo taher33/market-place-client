@@ -48,7 +48,7 @@ export default function Upload({}: Props): ReactElement {
     },
     {
       onSuccess: () => {
-        toast("🦄 Wow so easy!", {
+        toast("🦄 created new product!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
