@@ -24,6 +24,7 @@ function Profile({}: Props): ReactElement {
   const { user } = useAppContext();
   const me = user._id === userId;
 
+  //req profile user data
   const profile = useQuery(["profile"], () =>
     axios_instance(true)({
       method: "GET",
@@ -31,12 +32,14 @@ function Profile({}: Props): ReactElement {
     })
   );
 
-  const { data, isLoading, isError } = useQuery(["products"], () =>
+  //req profile user product data
+  const { data, isLoading, isError } = useQuery(["products", userId], () =>
     axios_instance(true)({
       method: "GET",
-      url: "products?seller=" + profile.data?.data.user._id,
+      url: "products?seller=" + userId,
     })
   );
+
   const followQuery = useMutation(["follow"], () =>
     axios_instance(true)({
       method: "PATCH",
@@ -44,6 +47,7 @@ function Profile({}: Props): ReactElement {
       data: { email: profile.data?.data.user.email },
     })
   );
+
   return (
     <div className={styles.container}>
       <aside>
