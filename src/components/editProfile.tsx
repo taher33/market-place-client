@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
+
+import { useSpring, animated } from "react-spring";
 import { useMutation, useQueryClient } from "react-query";
 
 import styles from "../styles/editProfile.module.scss";
@@ -59,8 +61,14 @@ function EditProfile(props: Props): JSX.Element {
     console.log("form submitted");
   };
 
+  //animations
+  const springAnmimations = useSpring({
+    from: { opacity: 0, xyz: [0, 200, 0] },
+    to: { opacity: 1, xyz: [0, 0, 0] },
+  });
+
   return (
-    <div className={styles.wrapper}>
+    <animated.div style={springAnmimations} className={styles.wrapper}>
       <div className={styles.header}>
         <button onClick={() => props.setShow(false)}>close</button>
         <h2>{user.name}</h2>
@@ -118,7 +126,7 @@ function EditProfile(props: Props): JSX.Element {
           save changes
         </button>
       </div>
-    </div>
+    </animated.div>
   );
 }
 
