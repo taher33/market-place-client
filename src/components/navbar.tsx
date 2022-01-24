@@ -1,7 +1,8 @@
 import React, { ReactElement, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { GrNotification, GrSearch } from "react-icons/gr";
+import { GrSearch } from "react-icons/gr";
+import { IoIosNotifications, IoIosNotificationsOutline } from "react-icons/io";
 import { BiMenu } from "react-icons/bi";
 import styles from "../styles/navbar.module.scss";
 import { PhoneMenu } from "./phonemenu";
@@ -38,18 +39,24 @@ function Navbar({}: Props): ReactElement {
           </>
         )}
       </div>
-      <div className={styles.svgMenu}>
+      <div className={styles.notification}>
         {user.name && (
           <button
             onClick={() => setNotifications(!notifications)}
-            className={styles.notifications}
+            className={styles.notificationsbtn}
           >
-            <GrNotification />
+            {notifications ? (
+              <IoIosNotifications />
+            ) : (
+              <IoIosNotificationsOutline />
+            )}
           </button>
         )}
         {notifications && (
           <Notifictaions setShow={setNotifications} show={notifications} />
         )}
+      </div>
+      <div className={styles.svgMenu}>
         <BiMenu onClick={() => setShow(!show)} />
         {show && <PhoneMenu setShow={setShow} show={show} />}
       </div>

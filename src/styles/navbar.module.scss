@@ -21,7 +21,7 @@
 
   .svgMenu {
     width: fit-content;
-    margin-left: auto;
+    margin-left: 1rem;
     svg {
       font-size: 2rem;
       cursor: pointer;
@@ -32,6 +32,27 @@
   .searchBar,
   .links {
     display: none;
+  }
+  .notification {
+    margin-left: auto;
+    .notificationsbtn {
+      background-color: white;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      font-size: 1.9rem;
+      border-radius: 50%;
+      height: 2rem;
+      width: 2rem;
+      padding: 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgb(228, 228, 228);
+      }
+    }
   }
 }
 
