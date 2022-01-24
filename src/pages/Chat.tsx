@@ -115,6 +115,8 @@ function Chat({}: Props): ReactElement {
     );
     reset();
   };
+
+  // ui
   return (
     <div className={styles.container}>
       <aside>
@@ -164,20 +166,11 @@ function Chat({}: Props): ReactElement {
         {Threads &&
           Threads.map((thread) => (
             <Link key={thread._id} to={"/chat?id=" + thread._id}>
-              <div
-                onClick={() => {
-                  setSelectedThread(thread._id);
-                }}
-                className={`${styles.user} ${
-                  thread._id === selectedUser ? styles.selected : null
-                }`}
-              >
-                <img src="food.jpg" alt="user" />
-                <div className={thread.connected ? styles.connectedUser : ""}>
-                  <h5>{thread.clients[0].name}</h5>
-                  <p>last message</p>
-                </div>
-              </div>
+              <ThreadUi
+                thread={thread}
+                selectedUser={selectedUser}
+                setSelectedThread={setSelectedThread}
+              />
             </Link>
           ))}
       </div>
@@ -186,3 +179,29 @@ function Chat({}: Props): ReactElement {
 }
 
 export default Chat;
+
+interface ThreadProps {
+  thread: Thread;
+  selectedUser: string | null;
+  setSelectedThread: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
+  //ui
+  return (
+    <div
+      onClick={() => {
+        setSelectedThread(thread._id);
+      }}
+      className={`${styles.user} ${
+        thread._id === selectedUser ? styles.selected : null
+      }`}
+    >
+      <img src="food.jpg" alt="user" />
+      <div className={thread.connected ? styles.connectedUser : ""}>
+        <h5>{thread.clients[0].name}</h5>
+        <p>{thread.messages[thread.messages.length - 1]}</p>
+      </div>
+    </div>
+  );
+}

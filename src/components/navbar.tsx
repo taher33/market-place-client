@@ -23,7 +23,7 @@ function Navbar({}: Props): ReactElement {
   const location = router.location.pathname;
 
   const createAtoast = (msg: Messages) => {
-    toast(trimStrings(msg.content, 20) + " from " + msg.sender, {
+    toast("new message : " + trimStrings(msg.content, 20), {
       position: "bottom-right",
       autoClose: 5000,
       closeOnClick: true,
