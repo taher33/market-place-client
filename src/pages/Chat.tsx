@@ -79,23 +79,23 @@ function Chat({}: Props): ReactElement {
     );
   }, [socket, user._id]);
 
-  //todo : add route for unread messages
+  // muation
   const updateMessages = useMutation((messages: Messages[]) =>
     axios_instance(true)({
       method: "PATCH",
       url: "users/messages",
-      data: messages,
+      data: { messages },
     })
   );
-
+  // useFull function
   const readMessages = (messages: Messages[]) => {
     const unreadMessages = messages
       .filter((el) => !el.read)
       .filter((el) => el.sender !== user._id);
-    // updateMessages.mutate(unreadMessages);
     return unreadMessages;
   };
 
+  //todo fix the error
   useEffect(() => {
     if (!user || !thread) return;
     let payload = {
@@ -106,8 +106,12 @@ function Chat({}: Props): ReactElement {
       payload,
       ({ status, prevMessages, error }: any) => {
         if (status === "error") return console.log(error);
+        const unreadMessages = readMessages(prevMessages);
         setMessages(prevMessages);
-        readMessages(prevMessages);
+        if (!unreadMessages.length) return;
+        updateMessages.mutate(unreadMessages);
+        //all messages are read here
+        setMessages(prevMessages);
       }
     );
   }, [thread, socket, user, user._id]);
@@ -204,14 +208,18 @@ interface ThreadProps {
 
 function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
   const { user } = useAppContext();
-  const unreadMessages = thread.messages
-    .filter((el) => !el.read)
-    .filter((el) => el.sender !== user._id).length;
+  const [unreadMessages, setUnreadMessages] = useState(
+    thread.messages
+      .filter((el) => !el.read)
+      .filter((el) => el.sender !== user._id).length
+  );
+
   //ui
   return (
     <div
       onClick={() => {
         setSelectedThread(thread._id);
+        setUnreadMessages(0);
       }}
       className={`${styles.user} ${
         thread._id === selectedUser ? styles.selected : null
@@ -223,9 +231,11 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
         <p>
           {trimStrings(thread.messages[thread.messages.length - 1].content, 20)}
         </p>
-        <div className={styles.unread}>
-          <span>{unreadMessages}</span>
-        </div>
+        {!!unreadMessages && (
+          <div className={styles.unread}>
+            <span>{unreadMessages}</span>
+          </div>
+        )}
       </div>
     </div>
   );
