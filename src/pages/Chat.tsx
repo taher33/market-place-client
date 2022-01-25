@@ -43,13 +43,16 @@ function Chat({}: Props): ReactElement {
         newMessages.push(msg);
         setMessages(newMessages);
       } else {
-        console.log(msg.content);
+        setThreads((prev) => {
+          prev.find((thr) => thr._id === threadId)?.messages.push(msg);
+          return prev;
+        });
       }
     });
     return () => {
       isSubscibed = false;
     };
-  }, [messages, thread, socket]);
+  }, [messages, thread, socket, Threads]);
 
   useEffect(() => {
     let payload = {
@@ -208,11 +211,18 @@ interface ThreadProps {
 
 function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
   const { user } = useAppContext();
-  const [unreadMessages, setUnreadMessages] = useState(
-    thread.messages
-      .filter((el) => !el.read)
-      .filter((el) => el.sender !== user._id).length
+  const [unreadMessages, setUnreadMessages] = useState(0);
+  const [readLastMsg, setReadLastMsg] = useState(
+    thread.messages[thread.messages.length - 1].read
   );
+
+  useEffect(() => {
+    setUnreadMessages(
+      thread.messages
+        .filter((el) => !el.read)
+        .filter((el) => el.sender !== user._id).length
+    );
+  }, [user._id, thread.messages, selectedUser]);
 
   //ui
   return (
@@ -220,6 +230,7 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
       onClick={() => {
         setSelectedThread(thread._id);
         setUnreadMessages(0);
+        setReadLastMsg(true);
       }}
       className={`${styles.user} ${
         thread._id === selectedUser ? styles.selected : null
@@ -234,6 +245,11 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
         {!!unreadMessages && (
           <div className={styles.unread}>
             <span>{unreadMessages}</span>
+          </div>
+        )}
+        {!readLastMsg && (
+          <div className={styles.unreadMessage}>
+            <span>unread</span>
           </div>
         )}
       </div>
