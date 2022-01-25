@@ -3,6 +3,6 @@ export function trimStrings(
   limit: number,
   removeDots?: boolean
 ): string {
-  if (removeDots) return str.slice(0, limit);
+  if (removeDots || str.length <= limit) return str.slice(0, limit);
   return str.slice(0, limit) + "...";
 }

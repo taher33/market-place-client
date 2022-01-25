@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { ChatPeople } from "../components/chatpeople";
@@ -10,7 +10,9 @@ import { useAppContext } from "../utils/context";
 import { ChatUser, Messages, Thread, User } from "../utils/types";
 import { useQuery as getQueryParams } from "../utils/usequery";
 import { axios_instance } from "../utils/axios";
+import { trimStrings } from "../utils/useFullFunctions";
 import { BiArrowBack, BiGridSmall } from "react-icons/bi";
+import { userInfo } from "os";
 
 interface Props {}
 interface MessageForm {
@@ -67,6 +69,7 @@ function Chat({}: Props): ReactElement {
             } else el.connected = false;
           });
         });
+
         threads.forEach((el) => {
           if (el.clients[0]._id === user._id) el.clients = [el.clients[1]];
           else el.clients = [el.clients[0]];
@@ -76,8 +79,21 @@ function Chat({}: Props): ReactElement {
     );
   }, [socket, user._id]);
 
+  //todo : add route for unread messages
+  const updateMessages = useMutation((messages: Messages[]) =>
+    axios_instance(true)({
+      method: "PATCH",
+      url: "users/messages",
+      data: messages,
+    })
+  );
+
   const readMessages = (messages: Messages[]) => {
-    messages.filter((el) => el.read);
+    const unreadMessages = messages
+      .filter((el) => !el.read)
+      .filter((el) => el.sender !== user._id);
+    // updateMessages.mutate(unreadMessages);
+    return unreadMessages;
   };
 
   useEffect(() => {
@@ -187,6 +203,10 @@ interface ThreadProps {
 }
 
 function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
+  const { user } = useAppContext();
+  const unreadMessages = thread.messages
+    .filter((el) => !el.read)
+    .filter((el) => el.sender !== user._id).length;
   //ui
   return (
     <div
@@ -200,7 +220,12 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
       <img src="food.jpg" alt="user" />
       <div className={thread.connected ? styles.connectedUser : ""}>
         <h5>{thread.clients[0].name}</h5>
-        <p>{thread.messages[thread.messages.length - 1]}</p>
+        <p>
+          {trimStrings(thread.messages[thread.messages.length - 1].content, 20)}
+        </p>
+        <div className={styles.unread}>
+          <span>{unreadMessages}</span>
+        </div>
       </div>
     </div>
   );

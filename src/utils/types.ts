@@ -44,7 +44,7 @@ export interface Product {
 
 export interface Thread {
   clients: ChatUser[];
-  messages: string[];
+  messages: Messages[];
   createdAt: string;
   updatedAt: string;
   connected: boolean;
