@@ -58,8 +58,6 @@ export function User({
         <img src="food.jpg" alt="user" />
         <div className={user.connected ? styles.connectedUser : ""}>
           <h5>{user.name}</h5>
-
-          {user.notification && <p>notification</p>}
         </div>
         <HiOutlineDotsHorizontal />
       </div>

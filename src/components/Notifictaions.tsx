@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import styles from "../styles/notifications.module.scss";
@@ -6,6 +6,7 @@ import { axios_instance } from "../utils/axios";
 import { useQuery } from "react-query";
 import { AiOutlineClose } from "react-icons/ai";
 import FullPageLoader from "./fullPageLoader";
+import { Notification } from "../utils/types";
 
 interface Props {
   show: boolean;
@@ -13,14 +14,19 @@ interface Props {
 }
 
 function Notifications(props: Props): JSX.Element {
-  const notifcationsQuery = useQuery(["notifcations"], () =>
-    axios_instance(true)({
-      method: "GET",
-      url: "users/checkNotifications",
-    })
-  );
+  const [notifications, setNotifications] = useState<Notification[]>();
 
-  console.log(notifcationsQuery.data?.data);
+  const notifcationsQuery = useQuery(
+    ["notifcations"],
+    () =>
+      axios_instance(true)({
+        method: "GET",
+        url: "users/checkNotifications",
+      }),
+    {
+      onSuccess: (data) => setNotifications(data.data.notifications),
+    }
+  );
 
   //ui
   return (
@@ -36,13 +42,17 @@ function Notifications(props: Props): JSX.Element {
             <FullPageLoader />
           </div>
         ) : notifcationsQuery.isSuccess ? (
-          <div>
-            <Link to="#" className={styles.notification}>
-              <h5>omar</h5>
-              <p>has sent you a message</p>
-              <span>hey man what is up</span>
-            </Link>
-          </div>
+          notifications?.map((el) => (
+            <div key={el._id}>
+              <Link to="#">
+                <img src={el.creator.profileImg} alt="profile" />
+                <div className={styles.text}>
+                  <h4>{el.creator.name} </h4>
+                  <p>{el.body}</p>
+                </div>
+              </Link>
+            </div>
+          ))
         ) : null}
       </div>
     </div>

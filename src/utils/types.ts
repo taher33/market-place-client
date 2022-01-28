@@ -8,6 +8,14 @@ export interface Messages {
   read: boolean;
 }
 
+export interface Notification {
+  creator: User;
+  body: string;
+  read: boolean;
+  type: "message" | "user action";
+  _id: string;
+}
+
 export interface ChatUser {
   profileImg?: String;
   People_I_follow: string[];
@@ -15,7 +23,6 @@ export interface ChatUser {
   email: string;
   _id: string;
   name: string;
-  notification: boolean;
   connected: boolean;
 }
 export interface User {
