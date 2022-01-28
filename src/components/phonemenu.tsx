@@ -61,7 +61,10 @@ export function PhoneMenu({ setShow }: Props) {
             id="profile"
             className={`${location.startsWith("/profile") && styles.selected}`}
           >
-            <Link to={"/profile?id=" + user._id} onClick={() => setShow(false)}>
+            <Link
+              to={"/profile?id=" + user?._id}
+              onClick={() => setShow(false)}
+            >
               <BiUser />
               profile
             </Link>

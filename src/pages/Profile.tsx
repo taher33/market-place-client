@@ -22,7 +22,7 @@ function Profile({}: Props): ReactElement {
   };
 
   const { user } = useAppContext();
-  const me = user._id === userId;
+  const me = user?._id === userId;
 
   //req profile user data
   const profile = useQuery(["profile"], () =>
@@ -67,7 +67,7 @@ function Profile({}: Props): ReactElement {
               )}
               {!me && (
                 <button onClick={followUser}>
-                  {user.People_I_follow.includes(profile.data?.data.user._id)
+                  {user?.People_I_follow.includes(profile.data?.data.user._id)
                     ? "unfollow"
                     : "follow"}
                 </button>

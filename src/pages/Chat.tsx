@@ -13,6 +13,7 @@ import { axios_instance } from "../utils/axios";
 import { trimStrings } from "../utils/useFullFunctions";
 import { BiArrowBack, BiGridSmall } from "react-icons/bi";
 import { userInfo } from "os";
+import { threadId } from "worker_threads";
 
 interface Props {}
 interface MessageForm {
@@ -21,7 +22,6 @@ interface MessageForm {
 interface GetUsersType {
   status: string;
   Connectedusers: string[];
-  threads: Thread[];
 }
 function Chat({}: Props): ReactElement {
   const { user, socket } = useAppContext();
@@ -33,54 +33,53 @@ function Chat({}: Props): ReactElement {
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
   const [Threads, setThreads] = useState<Thread[]>([]);
+  const [connectedUsers, setConnectedUsers] = useState<string[]>();
   const [selectedUser, setSelectedThread] = useState<string | null>(null);
+
+  const threadQuery = useQuery(
+    ["threads"],
+    () =>
+      axios_instance(true)({
+        url: "users/threads",
+        method: "GET",
+      }),
+    {
+      onSuccess: (data) => setThreads(data?.data.newThread),
+    }
+  );
 
   useEffect(() => {
     let isSubscibed = true;
-    socket.on("private message", ({ msg, threadId }) => {
+
+    socket?.on("private message", ({ msg, threadId }) => {
       if (threadId === thread && isSubscibed) {
         let newMessages = [...messages];
         newMessages.push(msg);
         setMessages(newMessages);
       } else {
-        setThreads((prev) => {
-          prev.find((thr) => thr._id === threadId)?.messages.push(msg);
-          return prev;
-        });
+        // setThreads((prev) => {
+        //   prev.find((thr) => thr._id === threadId)?.messages.push(msg);
+        //   return prev;
+        // });
       }
     });
     return () => {
       isSubscibed = false;
     };
-  }, [messages, thread, socket, Threads]);
+  }, [messages, thread, socket]);
 
   useEffect(() => {
     let payload = {
-      _id: user._id,
+      _id: user?._id,
     };
-    socket.emit(
+    socket?.emit(
       "get connected users",
       payload,
-      ({ status, threads, Connectedusers }: GetUsersType) => {
-        threads?.forEach((el: Thread) => {
-          Connectedusers.forEach((socketUser) => {
-            let partner;
-            if (el.clients[0]._id === user._id) partner = el.clients[1]._id;
-            else partner = el.clients[0]._id;
-            if (socketUser === partner || el.connected) {
-              el.connected = true;
-            } else el.connected = false;
-          });
-        });
-
-        threads.forEach((el) => {
-          if (el.clients[0]._id === user._id) el.clients = [el.clients[1]];
-          else el.clients = [el.clients[0]];
-        });
-        setThreads(threads);
+      ({ status, Connectedusers }: GetUsersType) => {
+        setConnectedUsers(Connectedusers);
       }
     );
-  }, [socket, user._id]);
+  }, [socket, user?._id]);
 
   // muation
   const updateMessages = useMutation((messages: Messages[]) =>
@@ -91,10 +90,11 @@ function Chat({}: Props): ReactElement {
     })
   );
   // useFull function
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const readMessages = (messages: Messages[]) => {
     const unreadMessages = messages
       .filter((el) => !el.read)
-      .filter((el) => el.sender !== user._id);
+      .filter((el) => el.sender !== user?._id);
     return unreadMessages;
   };
 
@@ -104,7 +104,7 @@ function Chat({}: Props): ReactElement {
     let payload = {
       threadId: thread,
     };
-    socket.emit(
+    socket?.emit(
       "get previous messages",
       payload,
       ({ status, prevMessages, error }: any) => {
@@ -117,20 +117,20 @@ function Chat({}: Props): ReactElement {
         setMessages(prevMessages);
       }
     );
-  }, [thread, socket, user, user._id]);
+  }, [thread, socket, user, user?._id, readMessages, updateMessages]);
 
   const SendMessage = async (data: MessageForm) => {
     if (!thread && !user) return;
     let payload = {
       content: data.content,
-      sender: user._id,
+      sender: user?._id,
       threadId: thread,
     };
-    socket.emit(
+    socket?.emit(
       "private message",
       payload,
       (res: { status: string; msg: any; error: any }) => {
-        if (res.status === "error") return console.log(res.error);
+        if (res.status === "error") return console.error(res.error);
         let newMessages = [...messages];
         newMessages.push(res.msg);
         setMessages(newMessages);
@@ -168,7 +168,7 @@ function Chat({}: Props): ReactElement {
               <Message
                 key={id}
                 content={message.content}
-                myMessage={user._id === message.sender}
+                myMessage={user?._id === message.sender}
                 lastMessage={id === messages.length - 1}
               />
             ))}
@@ -193,6 +193,7 @@ function Chat({}: Props): ReactElement {
                 thread={thread}
                 selectedUser={selectedUser}
                 setSelectedThread={setSelectedThread}
+                connectedUsers={connectedUsers}
               />
             </Link>
           ))}
@@ -207,22 +208,21 @@ interface ThreadProps {
   thread: Thread;
   selectedUser: string | null;
   setSelectedThread: React.Dispatch<React.SetStateAction<string | null>>;
+  connectedUsers: string[] | undefined;
 }
 
-function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
+function ThreadUi({
+  thread,
+  setSelectedThread,
+  selectedUser,
+  connectedUsers,
+}: ThreadProps) {
   const { user } = useAppContext();
-  const [unreadMessages, setUnreadMessages] = useState(0);
-  const [readLastMsg, setReadLastMsg] = useState(
-    thread.messages[thread.messages.length - 1].read
-  );
+  const [unreadMessages, setUnreadMessages] = useState(thread.unreadMsg);
 
   useEffect(() => {
-    setUnreadMessages(
-      thread.messages
-        .filter((el) => !el.read)
-        .filter((el) => el.sender !== user._id).length
-    );
-  }, [user._id, thread.messages, selectedUser]);
+    thread.connected = connectedUsers?.includes(thread.client._id);
+  }, [connectedUsers, thread]);
 
   //ui
   return (
@@ -230,7 +230,6 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
       onClick={() => {
         setSelectedThread(thread._id);
         setUnreadMessages(0);
-        setReadLastMsg(true);
       }}
       className={`${styles.user} ${
         thread._id === selectedUser ? styles.selected : null
@@ -238,18 +237,11 @@ function ThreadUi({ thread, setSelectedThread, selectedUser }: ThreadProps) {
     >
       <img src="food.jpg" alt="user" />
       <div className={thread.connected ? styles.connectedUser : ""}>
-        <h5>{thread.clients[0].name}</h5>
-        <p>
-          {trimStrings(thread.messages[thread.messages.length - 1].content, 20)}
-        </p>
+        <h5>{thread.client.name}</h5>
+        <p>{trimStrings(thread.lastMessage.content, 20)}</p>
         {!!unreadMessages && (
           <div className={styles.unread}>
             <span>{unreadMessages}</span>
-          </div>
-        )}
-        {!readLastMsg && (
-          <div className={styles.unreadMessage}>
-            <span>unread</span>
           </div>
         )}
       </div>

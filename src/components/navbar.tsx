@@ -16,9 +16,9 @@ import { trimStrings } from "../utils/useFullFunctions";
 interface Props {}
 
 function Navbar({}: Props): ReactElement {
+  const { user, socket } = useAppContext();
   const [show, setShow] = useState(false);
   const [notifications, setNotifications] = useState(false);
-  const { user, socket } = useAppContext();
   const router = useHistory();
   const location = router.location.pathname;
 
@@ -32,7 +32,7 @@ function Navbar({}: Props): ReactElement {
 
   useEffect(() => {
     if (!location.startsWith("chat")) {
-      socket.on("private message", ({ msg }) => {
+      socket?.on("private message", ({ msg }) => {
         console.log("toast 1");
         createAtoast(msg);
       });
@@ -62,8 +62,8 @@ function Navbar({}: Props): ReactElement {
           {
             //! remove this here: the h3, look for the design.
           }
-          {user.name ? (
-            <h3 style={{ margin: 0 }}>{user.name}</h3>
+          {user?.name ? (
+            <h3 style={{ margin: 0 }}>{user?.name}</h3>
           ) : (
             <>
               <Link to="/signup">sign up</Link>
@@ -72,7 +72,7 @@ function Navbar({}: Props): ReactElement {
           )}
         </div>
         <div className={styles.notification}>
-          {user.name && (
+          {user?.name && (
             <button
               onClick={() => setNotifications(!notifications)}
               className={styles.notificationsbtn}

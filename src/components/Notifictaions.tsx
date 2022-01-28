@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import styles from "../styles/notifications.module.scss";
 import { axios_instance } from "../utils/axios";
 import { useQuery } from "react-query";
+import { AiOutlineClose } from "react-icons/ai";
 import FullPageLoader from "./fullPageLoader";
 
 interface Props {
@@ -19,12 +20,14 @@ function Notifications(props: Props): JSX.Element {
     })
   );
 
+  console.log(notifcationsQuery.data?.data);
+
   //ui
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <button onClick={() => props.setShow(false)}>close</button>
         <h3>notifications</h3>
+        <AiOutlineClose onClick={() => props.setShow(false)} />
       </div>
       <div className={styles.lineBreak}></div>
       <div className={styles.notificationsWrapper}>

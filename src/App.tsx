@@ -11,19 +11,30 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import SingleProduct from "./pages/SingleProduct";
 import { AppContext } from "./utils/context";
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 import { useQuery } from "react-query";
 import { axios_instance } from "./utils/axios";
-import { Response } from "./utils/types";
+import { Response, User } from "./utils/types";
 import Upload from "./pages/Upload";
 
-const socket =
-  process.env.NODE_ENV === "development"
-    ? io("http://localhost:8080/")
-    : io(process.env.REACT_APP_CHAT_ENDPOINT_PROD!);
-
 function App(): JSX.Element {
-  const [user, setUser] = useState({} as any);
+  const [user, setUser] = useState<User>();
+  const [socket, setSocket] = useState<Socket | undefined>();
+
+  useEffect(() => {
+    const newSocket =
+      process.env.NODE_ENV === "development"
+        ? io("http://localhost:8080/")
+        : io(process.env.REACT_APP_CHAT_ENDPOINT_PROD!);
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+      console.log("disconnect");
+    };
+  }, [setSocket]);
+
   const { isLoading } = useQuery(
     "login",
     () =>
@@ -37,18 +48,16 @@ function App(): JSX.Element {
         let payload = {
           user: data.data.user,
         };
-        socket.emit("connect to server", payload, (res: Response) => {
+        socket?.emit("connect to server", payload, (res: Response) => {
           if (res.status === "error") return console.log(res.data);
         });
       },
-      onError: () => {},
     }
   );
   return (
-    <AppContext.Provider value={{ user, setUser, socket }}>
+    <AppContext.Provider value={{ user, setUser, socket, setSocket }}>
       <div>
         <Navbar />
-
         <Scrolltotop />
         <Switch>
           <Route path="/" exact>

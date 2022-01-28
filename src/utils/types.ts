@@ -43,30 +43,18 @@ export interface Product {
 }
 
 export interface Thread {
-  clients: ChatUser[];
-  messages: Messages[];
-  createdAt: string;
-  updatedAt: string;
-  connected: boolean;
+  client: ChatUser;
+  lastMessage: Messages;
+  connected?: boolean;
   _id: string;
+  unreadMsg: number;
 }
 
 export interface State {
-  user: User;
-  setUser: Dispatch<
-    SetStateAction<
-      | {
-          name: string;
-          email: string;
-          id: string;
-          profileImg: string | undefined;
-          People_I_follow: string[];
-          People_that_follow_me: string[];
-        }
-      | undefined
-    >
-  >;
-  socket: Socket;
+  user: User | undefined;
+  setUser: Dispatch<SetStateAction<User | undefined>>;
+  socket: Socket | undefined;
+  setSocket: Dispatch<SetStateAction<Socket | undefined>>;
 }
 
 export interface Response {

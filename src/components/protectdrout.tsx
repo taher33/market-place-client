@@ -13,7 +13,7 @@ interface Props {
 const ProtectRoute = ({ children, loading, ...rest }: Props) => {
   const { user } = useAppContext();
 
-  const isLogedIn = user._id ? true : false;
+  const isLogedIn = user?._id ? true : false;
   return (
     <Route
       {...rest}

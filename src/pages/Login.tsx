@@ -34,7 +34,7 @@ function Signup({}: Props): ReactElement {
         let payload = {
           user: data.data.user,
         };
-        socket.emit(
+        socket?.emit(
           "connect to server",
           payload,
           (res: { status: string; error: any }) => {

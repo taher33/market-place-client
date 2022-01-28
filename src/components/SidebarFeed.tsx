@@ -54,7 +54,7 @@ const SidebarFeed = (): ReactElement => {
           id="profile"
           className={`${location.startsWith("/profile") && styles.selected}`}
         >
-          <Link to={"/profile?id=" + user._id}>
+          <Link to={"/profile?id=" + user?._id}>
             <BiUser />
             profile
           </Link>

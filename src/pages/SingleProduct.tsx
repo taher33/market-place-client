@@ -58,11 +58,11 @@ function SingleProduct({}: Props): ReactElement {
   const submitMessage = (data: Form) => {
     setbtnState("loading");
     const payload = {
-      sender: user._id,
+      sender: user?._id,
       content: data.content,
       reciever: product.seller._id,
     };
-    socket.emit("new private message", payload, (status: string) => {
+    socket?.emit("new private message", payload, (status: string) => {
       if (status === "success") setbtnState("submit");
       else setbtnState("error");
     });
@@ -82,7 +82,7 @@ function SingleProduct({}: Props): ReactElement {
         <div className={styles.textWrapper}>
           <h2>{product.description} </h2>
           <h3>{product.price} USD</h3>
-          {product.seller._id !== user._id && (
+          {product.seller._id !== user?._id && (
             <>
               <p>send a message to the seller</p>
               <form onSubmit={handleSubmit(submitMessage)}>

@@ -22,7 +22,7 @@ export function ChatPeople({ setShow, ChatUsers }: Props) {
               key={user._id}
               selectedId={selectedUser}
               setSelected={setSelectedUser}
-              user={user.clients[0]}
+              user={user.client}
             />
           );
         })}
