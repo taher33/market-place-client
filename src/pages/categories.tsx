@@ -17,15 +17,17 @@ function Categories({}: Props): ReactElement {
   const query = getQueryParams().toString();
   const { register, watch } = useForm();
   const select = watch("select");
+  const sort = watch("sort");
 
   const { data, isLoading, isError } = useQuery(
-    ["products", query.toString(), select],
+    ["products", query.toString(), select, sort],
     () =>
       axios_instance(true)({
         method: "GET",
-        url: "products?" + select + "=true" + query,
+        url: "products?" + select + "=true&" + query + "&sort=" + sort,
       })
   );
+
   return (
     <div className={styles.container}>
       <aside>
@@ -46,6 +48,14 @@ function Categories({}: Props): ReactElement {
             <Link to="?categorie=beauty">beauty</Link>
             <Link to="?categorie=sports">sports</Link>
             <Link to="?categorie=games">games</Link>
+            <Link to="?categorie=automobile">automobile</Link>
+          </div>
+          <div className={styles.sort}>
+            <span>sort by :</span>
+            <select {...register("sort")}>
+              <option value="price">price</option>
+              <option value="rating">rating</option>
+            </select>
           </div>
         </div>
         {isLoading ? (
