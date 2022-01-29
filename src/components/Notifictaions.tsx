@@ -7,6 +7,8 @@ import { useQuery } from "react-query";
 import { AiOutlineClose } from "react-icons/ai";
 import FullPageLoader from "./fullPageLoader";
 import { Notification } from "../utils/types";
+import { trimStrings } from "../utils/useFullFunctions";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 
 interface Props {
   show: boolean;
@@ -42,17 +44,22 @@ function Notifications(props: Props): JSX.Element {
             <FullPageLoader />
           </div>
         ) : notifcationsQuery.isSuccess ? (
-          notifications?.map((el) => (
-            <div key={el._id}>
-              <Link to="#">
-                <img src={el.creator.profileImg} alt="profile" />
-                <div className={styles.text}>
-                  <h4>{el.creator.name} </h4>
-                  <p>{el.body}</p>
-                </div>
-              </Link>
-            </div>
-          ))
+          notifications?.map((el) => {
+            return (
+              <div key={el._id}>
+                <Link to="#">
+                  <img src={el.creator.profileImg} alt="profile" />
+                  <div className={styles.text}>
+                    <h4>{el.creator.name} </h4>
+                    <p>{trimStrings(el.body, 35)}</p>
+                  </div>
+                  <div className={styles.actions}>
+                    <HiOutlineDotsHorizontal />
+                  </div>
+                </Link>
+              </div>
+            );
+          })
         ) : null}
       </div>
     </div>

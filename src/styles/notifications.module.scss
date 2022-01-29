@@ -1,7 +1,6 @@
 @import "variables.scss";
 
 .wrapper {
-  width: fit-content;
   position: absolute;
   right: 2rem;
   top: 3.9rem;
@@ -10,6 +9,7 @@
   border-radius: 1rem;
   border: 1px solid #cccccc;
   filter: drop-shadow(0px 4px 25px rgba(0, 0, 0, 0.22));
+  width: 350px;
 
   .lineBreak {
     height: 1px;
@@ -21,7 +21,7 @@
     padding: 1rem 0.9rem 0;
     display: flex;
     align-items: center;
-    justify-items: center;
+    justify-content: space-between;
     font-size: 15px;
     h3 {
       margin: 0;
@@ -55,6 +55,7 @@
     }
     div {
       padding: 0 1rem;
+      margin-bottom: 1rem;
 
       a {
         text-decoration: none;
@@ -63,17 +64,40 @@
         align-items: flex-start;
 
         img {
-          height: 5rem;
-          width: 5rem;
+          height: 3.5rem;
+          width: 3.5rem;
+          object-fit: cover;
           border-radius: 50%;
           border: 1px solid #5a5a5a;
+          flex-shrink: 0;
         }
 
         .text {
-          padding: 0.5rem 1rem;
+          padding: 0.3rem 1rem;
+          flex-grow: 1;
           h4 {
+            font-weight: 500;
             text-transform: capitalize;
             margin: 0;
+          }
+          p {
+            font-weight: 200;
+            margin-top: 0.4rem;
+            margin-bottom: 0;
+          }
+        }
+        .actions {
+          align-self: center;
+          font-size: 1.3rem;
+          cursor: pointer;
+          width: fit-content;
+          flex-shrink: 0;
+          svg {
+            padding: 0.3rem;
+            border-radius: 50%;
+            &:hover {
+              background-color: rgb(219, 206, 188);
+            }
           }
         }
       }
