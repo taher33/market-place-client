@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import { useQuery } from "react-query";
+import { useInfiniteQuery, useQuery } from "react-query";
 import { useQuery as getQueryParams } from "../utils/usequery";
 import { Link, useHistory } from "react-router-dom";
 import SidebarFeed from "../components/SidebarFeed";
@@ -8,25 +8,58 @@ import styles from "../styles/categories.module.scss";
 import { axios_instance } from "../utils/axios";
 import { Product } from "../utils/types";
 import FullPageLoader from "../components/fullPageLoader";
+import useIntersectionObserver from "../hooks/intersectionObs";
 import { useForm } from "react-hook-form";
 
 interface Props {}
 
 function Categories({}: Props): ReactElement {
   const router = useHistory();
+  const [page, setPage] = useState(1);
   const query = getQueryParams().toString();
   const { register, watch } = useForm();
   const select = watch("select");
   const sort = watch("sort");
+  const fetchProjects = async ({ pageParam = 1 }) => {
+    console.log(pageParam);
+    const res = await axios_instance(true)({
+      url:
+        "products?" +
+        select +
+        "=true&" +
+        query +
+        "&sort=" +
+        sort +
+        "&page=" +
+        pageParam,
 
-  const { data, isLoading, isError } = useQuery(
+      method: "GET",
+    });
+    return res.data;
+  };
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(
     ["products", query.toString(), select, sort],
-    () =>
-      axios_instance(true)({
-        method: "GET",
-        url: "products?" + select + "=true&" + query + "&sort=" + sort,
-      })
+    fetchProjects,
+    {
+      getNextPageParam: (lastPage, pages) => lastPage.nextPage,
+    }
   );
+
+  const loadMoreButtonRef = React.useRef(null);
+
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: () => fetchNextPage(),
+    enabled: !!hasNextPage,
+  });
 
   return (
     <div className={styles.container}>
@@ -58,33 +91,42 @@ function Categories({}: Props): ReactElement {
             </select>
           </div>
         </div>
-        {isLoading ? (
+        {status === "loading" ? (
           <div className={styles.loader}>
             <FullPageLoader />
           </div>
-        ) : isError ? (
+        ) : status === "error" ? (
           <h2 className={styles.errorState}>
             sorry but something went wrong <span>🤕</span> please try reloading
           </h2>
         ) : (
           <div className={styles.listings}>
-            {data?.data.products.map((product: Product) => (
-              <div key={product._id} className={styles.item}>
-                <img
-                  src={product.pictures[0]}
-                  alt="item"
-                  onClick={() => {
-                    router.replace("/product?id=" + product._id);
-                  }}
-                />
-                <div className={styles.details}>
-                  <p>{product.description}</p>
-                  <h3>{product.price} USD</h3>
+            {data?.pages.map((group) => {
+              return group?.products.map((product: Product) => (
+                <div key={product._id} className={styles.item}>
+                  <img
+                    src={product.pictures[0]}
+                    alt="item"
+                    onClick={() => {
+                      router.replace("/product?id=" + product._id);
+                    }}
+                  />
+                  <div className={styles.details}>
+                    <p>{product.description}</p>
+                    <h3>{product.price} USD</h3>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ));
+            })}
           </div>
         )}
+        <button
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+          ref={loadMoreButtonRef}
+        >
+          load more
+        </button>
       </main>
     </div>
   );
