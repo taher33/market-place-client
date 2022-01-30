@@ -15,11 +15,13 @@ interface Props {}
 
 function Categories({}: Props): ReactElement {
   const router = useHistory();
-  const [page, setPage] = useState(1);
-  const query = getQueryParams().toString();
   const { register, watch } = useForm();
+
+  const query = getQueryParams().toString();
+
   const select = watch("select");
   const sort = watch("sort");
+
   const fetchProjects = async ({ pageParam = 1 }) => {
     console.log(pageParam);
     const res = await axios_instance(true)({
@@ -37,6 +39,7 @@ function Categories({}: Props): ReactElement {
     });
     return res.data;
   };
+
   const {
     data,
     error,
@@ -52,7 +55,6 @@ function Categories({}: Props): ReactElement {
       getNextPageParam: (lastPage, pages) => lastPage.nextPage,
     }
   );
-
   const loadMoreButtonRef = React.useRef(null);
 
   useIntersectionObserver({
@@ -102,31 +104,34 @@ function Categories({}: Props): ReactElement {
         ) : (
           <div className={styles.listings}>
             {data?.pages.map((group) => {
-              return group?.products.map((product: Product) => (
-                <div key={product._id} className={styles.item}>
-                  <img
-                    src={product.pictures[0]}
-                    alt="item"
-                    onClick={() => {
-                      router.replace("/product?id=" + product._id);
-                    }}
-                  />
-                  <div className={styles.details}>
-                    <p>{product.description}</p>
-                    <h3>{product.price} USD</h3>
-                  </div>
-                </div>
-              ));
+              return group?.products.map(
+                (product: Product, index: number, array: any[]) => {
+                  return (
+                    <div key={product._id} className={styles.item}>
+                      <img
+                        src={product.pictures[0]}
+                        alt="item"
+                        onClick={() => {
+                          router.replace("/product?id=" + product._id);
+                        }}
+                      />
+                      <div className={styles.details}>
+                        <p>{product.description}</p>
+                        <h3>{product.price} USD</h3>
+                      </div>
+                    </div>
+                  );
+                }
+              );
             })}
           </div>
         )}
-        <button
-          onClick={() => fetchNextPage()}
-          disabled={!hasNextPage || isFetchingNextPage}
-          ref={loadMoreButtonRef}
-        >
-          load more
-        </button>
+        <div style={{ height: "20px" }} ref={loadMoreButtonRef}></div>
+        {isFetchingNextPage && (
+          <div className={styles.loader}>
+            <FullPageLoader />
+          </div>
+        )}
       </main>
     </div>
   );
