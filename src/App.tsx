@@ -66,9 +66,11 @@ function App(): JSX.Element {
           <ProtectRoute loading={isLoading} path="/profile">
             <Profile />
           </ProtectRoute>
-          <Route path="/upload">
+
+          <ProtectRoute loading={isLoading} path="/upload">
             <Upload />
-          </Route>
+          </ProtectRoute>
+
           <Route path="/signup">
             <Signup />
           </Route>

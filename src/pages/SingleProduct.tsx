@@ -25,7 +25,7 @@ interface Product {
   saves: number;
   price: number;
   stock: number;
-  pictures: [string];
+  pictures: string[];
   createdAt: string;
   rating: number;
   _id: string;
@@ -42,6 +42,7 @@ interface Form {
 function SingleProduct({}: Props): ReactElement {
   const { socket, user } = useAppContext();
   const { register, handleSubmit } = useForm<Form>();
+  const [index, setIndex] = useState(0);
   const [btnState, setbtnState] = useState<"error" | "submit" | "loading">(
     "submit"
   );
@@ -54,6 +55,10 @@ function SingleProduct({}: Props): ReactElement {
     })
   );
   const product = data?.data.product as Product;
+
+  const slide = (id: number) => {
+    setIndex(id);
+  };
 
   const submitMessage = (data: Form) => {
     setbtnState("loading");
@@ -81,7 +86,19 @@ function SingleProduct({}: Props): ReactElement {
   return (
     <div className={styles.container}>
       <div className={styles.productWrapper}>
-        <img src={product.pictures[0]} alt="product" />
+        <div className={styles.imageSlider}>
+          <img src={product.pictures[index]} alt="product" />
+          <div className={styles.btns}>
+            {product.pictures.map((el, id) => (
+              <pre
+                className={index === id ? styles.selected : ""}
+                id={"" + id}
+                onClick={() => slide(id)}
+              />
+            ))}
+          </div>
+        </div>
+
         <div className={styles.textWrapper}>
           <h2>{product.description} </h2>
           <h3>{product.price} USD</h3>
