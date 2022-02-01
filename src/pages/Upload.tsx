@@ -109,15 +109,11 @@ export default function Upload({}: Props): ReactElement {
                   !!pics[0] &&
                   Object.values(pics).map((el: any, id: any) => (
                     <div key={id} className={styles.container}>
-                      <div className={styles.overlay}></div>
                       {/* <TiDeleteOutline onClick={() => deletePic(id)} /> */}
                       <img src={URL.createObjectURL(el)} alt={el.name} />
                     </div>
                   ))}
               </div>
-              <label htmlFor="picture">
-                upload a picture <BiAddToQueue />
-              </label>
               <input
                 multiple
                 type="file"
@@ -126,7 +122,13 @@ export default function Upload({}: Props): ReactElement {
                 {...register("picture")}
               />
             </div>
+            <div className={styles.cta}>
+
+            <label className={styles.uplaodBtn} htmlFor="picture">
+              upload a picture <BiAddToQueue />
+            </label>
             <button type="submit">create product</button>
+            </div>
           </form>
         </div>
       </div>

@@ -214,7 +214,6 @@ function ThreadUi({
   const [unreadMessages, setUnreadMessages] = useState(thread.unreadMsg);
 
   thread.connected = connectedUsers?.includes(thread.client._id);
-
   //ui
   return (
     <div
@@ -229,7 +228,12 @@ function ThreadUi({
       <img src="food.jpg" alt="user" />
       <div className={thread.connected ? styles.connectedUser : ""}>
         <h5>{thread.client.name}</h5>
-        <p>{trimStrings(thread.lastMessage.content, 20)}</p>
+        <p>
+          {trimStrings(
+            thread.lastMessage ? thread.lastMessage.content : "",
+            20
+          )}
+        </p>
         {!!unreadMessages && (
           <div className={styles.unread}>
             <span>{unreadMessages}</span>
