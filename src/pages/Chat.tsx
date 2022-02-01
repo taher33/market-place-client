@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { ChatPeople } from "../components/chatpeople";
@@ -29,6 +29,7 @@ function Chat({}: Props): ReactElement {
   const { handleSubmit, register, reset } = useForm<MessageForm>();
   const query = getQueryParams();
   const thread = query.get("id");
+  const queryClient = useQueryClient();
 
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
@@ -36,16 +37,11 @@ function Chat({}: Props): ReactElement {
   const [connectedUsers, setConnectedUsers] = useState<string[]>();
   const [selectedUser, setSelectedThread] = useState<string | null>(null);
 
-  const threadQuery = useQuery(
-    ["threads"],
-    () =>
-      axios_instance(true)({
-        url: "users/threads",
-        method: "GET",
-      }),
-    {
-      onSuccess: (data) => setThreads(data?.data.newThread),
-    }
+  const threadQuery = useQuery(["threads"], () =>
+    axios_instance(true)({
+      url: "users/threads",
+      method: "GET",
+    })
   );
 
   useEffect(() => {
@@ -57,16 +53,13 @@ function Chat({}: Props): ReactElement {
         newMessages.push(msg);
         setMessages(newMessages);
       } else {
-        // setThreads((prev) => {
-        //   prev.find((thr) => thr._id === threadId)?.messages.push(msg);
-        //   return prev;
-        // });
+        queryClient.invalidateQueries("threads");
       }
     });
     return () => {
       isSubscibed = false;
     };
-  }, [messages, thread, socket]);
+  }, [messages, thread, socket, queryClient]);
 
   useEffect(() => {
     let payload = {
@@ -90,34 +83,35 @@ function Chat({}: Props): ReactElement {
     })
   );
   // useFull function
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const readMessages = (messages: Messages[]) => {
-    const unreadMessages = messages
-      .filter((el) => !el.read)
-      .filter((el) => el.sender !== user?._id);
-    return unreadMessages;
-  };
 
   //todo fix the error
   useEffect(() => {
+    const readMessages = (messages: Messages[]) => {
+      const unreadMessages = messages
+        .filter((el) => !el.read)
+        .filter((el) => el.sender !== user?._id);
+      return unreadMessages;
+    };
+
     if (!user || !thread) return;
     let payload = {
       threadId: thread,
     };
+
     socket?.emit(
       "get previous messages",
       payload,
       ({ status, prevMessages, error }: any) => {
         if (status === "error") return console.log(error);
-        const unreadMessages = readMessages(prevMessages);
+        // const unreadMessages = readMessages(prevMessages);
         setMessages(prevMessages);
-        if (!unreadMessages.length) return;
-        updateMessages.mutate(unreadMessages);
+        // if (!unreadMessages.length) return;
+        // updateMessages.mutate(unreadMessages);
         //all messages are read here
-        setMessages(prevMessages);
+        // setMessages(prevMessages);
       }
     );
-  }, [thread, socket, user, user?._id, readMessages, updateMessages]);
+  }, [thread, user]);
 
   const SendMessage = async (data: MessageForm) => {
     if (!thread && !user) return;
@@ -186,8 +180,8 @@ function Chat({}: Props): ReactElement {
       </div>
       <div className={styles.people}>
         <h3>recent</h3>
-        {Threads &&
-          Threads.map((thread) => (
+        {threadQuery?.data?.data.newThread &&
+          threadQuery.data.data.newThread.map((thread: Thread) => (
             <Link key={thread._id} to={"/chat?id=" + thread._id}>
               <ThreadUi
                 thread={thread}
@@ -217,12 +211,9 @@ function ThreadUi({
   selectedUser,
   connectedUsers,
 }: ThreadProps) {
-  const { user } = useAppContext();
   const [unreadMessages, setUnreadMessages] = useState(thread.unreadMsg);
 
-  useEffect(() => {
-    thread.connected = connectedUsers?.includes(thread.client._id);
-  }, [connectedUsers, thread]);
+  thread.connected = connectedUsers?.includes(thread.client._id);
 
   //ui
   return (
@@ -244,6 +235,7 @@ function ThreadUi({
             <span>{unreadMessages}</span>
           </div>
         )}
+        {thread.productThread && <span>product</span>}
       </div>
     </div>
   );

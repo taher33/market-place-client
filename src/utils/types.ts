@@ -55,6 +55,8 @@ export interface Thread {
   connected?: boolean;
   _id: string;
   unreadMsg: number;
+  productThread: boolean;
+  product: string | Product | undefined;
 }
 
 export interface State {

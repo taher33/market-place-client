@@ -1,6 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
+import { useHistory } from "react-router-dom";
 import EditProfile from "../components/editProfile";
 import SidebarFeed from "../components/SidebarFeed";
 
@@ -14,6 +15,7 @@ interface Props {}
 
 function Profile({}: Props): ReactElement {
   const userId = getQuery().get("id");
+  const router = useHistory();
 
   const [openEdit, setOpenEdit] = useState<boolean>(false);
 
@@ -110,7 +112,7 @@ function Profile({}: Props): ReactElement {
                     src={product.pictures[0]}
                     alt="item"
                     onClick={() => {
-                      // router.replace("/product?id=" + product._id);
+                      router.replace("/product?id=" + product._id);
                     }}
                   />
                   <div className={styles.details}>

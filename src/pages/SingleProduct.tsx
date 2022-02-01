@@ -61,10 +61,13 @@ function SingleProduct({}: Props): ReactElement {
       sender: user?._id,
       content: data.content,
       reciever: product.seller._id,
+      productId: product._id,
     };
-    socket?.emit("new private message", payload, (status: string) => {
+
+    socket?.emit("new private message", payload, ({ status, error }: any) => {
       if (status === "success") setbtnState("submit");
       else setbtnState("error");
+      console.log(error);
     });
   };
 

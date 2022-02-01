@@ -5,6 +5,8 @@ import { BiAddToQueue } from "react-icons/bi";
 import { ToastContainer, toast } from "react-toastify";
 
 import styles from "../styles/upload.module.scss";
+import "react-toastify/dist/ReactToastify.css";
+
 import { useMutation } from "react-query";
 import { axios_instance } from "../utils/axios";
 
