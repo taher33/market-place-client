@@ -69,11 +69,6 @@ function EditProfile(props: Props): JSX.Element {
 
   return (
     <animated.div style={springAnmimations} className={styles.wrapper}>
-      <div className={styles.header}>
-        <button onClick={() => props.setShow(false)}>close</button>
-        <h2>{user?.name}</h2>
-      </div>
-      <div className={styles.lineBreak}></div>
       <div className={styles.formWrapper}>
         <div className={styles.imageWrapper}>
           {profilePic ? (
@@ -81,7 +76,7 @@ function EditProfile(props: Props): JSX.Element {
           ) : (
             <img src={user?.profileImg} alt="user" />
           )}
-          <label htmlFor="profileImg">change profile image</label>
+          <label htmlFor="profileImg">change picture</label>
         </div>
 
         <form id="myForm" onSubmit={handleSubmit(submitChanges)}>
@@ -105,7 +100,7 @@ function EditProfile(props: Props): JSX.Element {
             <label htmlFor="description">description</label>
             <textarea
               cols={30}
-              rows={10}
+              rows={3}
               {...register("description")}
             ></textarea>
           </div>
