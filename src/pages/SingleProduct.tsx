@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import { useQuery as useParams } from "../utils/usequery";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import Listings from "../components/Listings";
 import { axios_instance } from "../utils/axios";
 
@@ -8,20 +8,15 @@ import styles from "../styles/singleProduct.module.scss";
 import FullPageLoader from "../components/fullPageLoader";
 import { useAppContext } from "../utils/context";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { User } from "../utils/types";
+import { Facebook } from "react-spinners-css";
 
 interface Props {}
 
-interface User {
-  profileImg: String;
-  People_I_follow: [string];
-  People_that_follow_me: [string];
-  email: string;
-  _id: string;
-  name: string;
-}
-
 interface Product {
   condition: String;
+  title: String;
   saves: number;
   price: number;
   stock: number;
@@ -43,22 +38,48 @@ function SingleProduct({}: Props): ReactElement {
   const { socket, user } = useAppContext();
   const { register, handleSubmit } = useForm<Form>();
   const [index, setIndex] = useState(0);
+  const [following, setFollowing] = useState<boolean>(false);
   const [btnState, setbtnState] = useState<"error" | "submit" | "loading">(
     "submit"
   );
+
   const query = useParams();
   const id = query.get("id");
-  const { data, isLoading, isError } = useQuery(["product", id], () =>
-    axios_instance(true)({
-      method: "GET",
-      url: "/products/singleProduct?_id=" + id,
-    })
+
+  const { data, isLoading, isError } = useQuery(
+    ["product", id],
+    () =>
+      axios_instance(true)({
+        method: "GET",
+        url: "/products/singleProduct?_id=" + id,
+      }),
+    {
+      onSuccess: (data) =>
+        user?.People_I_follow.includes(data?.data.product.seller._id),
+    }
   );
   const product = data?.data.product as Product;
 
   const slide = (id: number) => {
     setIndex(id);
   };
+
+  const followUser = async () => {
+    followQuery.mutate();
+  };
+
+  const followQuery = useMutation(
+    ["follow"],
+    () =>
+      axios_instance(true)({
+        method: "PATCH",
+        url: "users/follow",
+        data: { email: product.seller.email },
+      }),
+    {
+      onSettled: () => setFollowing(!following),
+    }
+  );
 
   const submitMessage = (data: Form) => {
     setbtnState("loading");
@@ -100,7 +121,7 @@ function SingleProduct({}: Props): ReactElement {
         </div>
 
         <div className={styles.textWrapper}>
-          <h2>{product.description} </h2>
+          <h2>{product.title} </h2>
           <h3>{product.price} USD</h3>
           {product.seller._id !== user?._id && (
             <>
@@ -123,12 +144,17 @@ function SingleProduct({}: Props): ReactElement {
           )}
           <div className={styles.sellerInfo}>
             <h4>info about the seller </h4>
-            <span>see profile</span>
+            <Link to={"profile?id=" + product.seller._id}>
+              <span>see profile</span>
+            </Link>
           </div>
           <div className={styles.user}>
-            <img src="/delivery.png" alt="user" />
+            <img src={product.seller.profileImg} alt="user" />
             <p>{product.seller.name}</p>
-            <span>follow</span>
+            <button onClick={followUser} disabled={followQuery.isLoading}>
+              {following ? "unfollow" : "follow"}
+              {followQuery.isLoading && <Facebook color="#1d81de" size={20} />}
+            </button>
           </div>
           <p className={styles.dateSince}>has been a seeler since 2065</p>
           <h4>Details</h4>
@@ -141,10 +167,10 @@ function SingleProduct({}: Props): ReactElement {
             )}
           </div>
           <div className={styles.detail}>
-            {product.details && (
+            {product.description && (
               <>
                 <h5>description</h5>
-                <p>{product.details}</p>
+                <p>{product.description}</p>
               </>
             )}
           </div>
