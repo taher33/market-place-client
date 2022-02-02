@@ -2,6 +2,7 @@ import React, { ReactElement, useState } from "react";
 import { FiMoreHorizontal } from "react-icons/fi";
 import { useMutation, useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
+import { Facebook } from "react-spinners-css";
 import EditProfile from "../components/editProfile";
 import SidebarFeed from "../components/SidebarFeed";
 
@@ -17,6 +18,7 @@ function Profile({}: Props): ReactElement {
   const userId = getQuery().get("id");
   const router = useHistory();
 
+  const [following, setFollowing] = useState<boolean>(false);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
 
   const followUser = async () => {
@@ -27,11 +29,16 @@ function Profile({}: Props): ReactElement {
   const me = user?._id === userId;
 
   //req profile user data
-  const profile = useQuery(["profile"], () =>
-    axios_instance(true)({
-      method: "GET",
-      url: "users/" + userId,
-    })
+  const profile = useQuery(
+    ["profile", userId],
+    () =>
+      axios_instance(true)({
+        method: "GET",
+        url: "users/" + userId,
+      }),
+    {
+      onSuccess: (data) => user?.People_I_follow.includes(data?.data.user._id),
+    }
   );
 
   //req profile user product data
@@ -42,12 +49,17 @@ function Profile({}: Props): ReactElement {
     })
   );
 
-  const followQuery = useMutation(["follow"], () =>
-    axios_instance(true)({
-      method: "PATCH",
-      url: "users/follow",
-      data: { email: profile.data?.data.user.email },
-    })
+  const followQuery = useMutation(
+    ["follow"],
+    () =>
+      axios_instance(true)({
+        method: "PATCH",
+        url: "users/follow",
+        data: { email: profile.data?.data.user.email },
+      }),
+    {
+      onSettled: () => setFollowing(!following),
+    }
   );
 
   return (
@@ -56,6 +68,7 @@ function Profile({}: Props): ReactElement {
         <SidebarFeed />
       </aside>
       <div className={styles.profileWrapper}>
+        {openEdit && <EditProfile setShow={setOpenEdit} show={openEdit} />}
         <div className={styles.userDesc}>
           <img src={profile.data?.data.user.profileImg} alt="user" />
           <div className={styles.details}>
@@ -64,17 +77,16 @@ function Profile({}: Props): ReactElement {
               {me && (
                 <button onClick={() => setOpenEdit(true)}>edit profile</button>
               )}
-              {openEdit && (
-                <EditProfile setShow={setOpenEdit} show={openEdit} />
-              )}
+
               {!me && (
                 <button onClick={followUser}>
-                  {user?.People_I_follow.includes(profile.data?.data.user._id)
-                    ? "unfollow"
-                    : "follow"}
+                  {following ? "unfollow" : "follow"}
+                  {followQuery.isLoading && (
+                    <Facebook color="#1f1f1f" size={20} />
+                  )}
                 </button>
               )}
-              {!me && <button>message</button>}
+              {/* {!me && <button>message</button>} */}
               <button>
                 <FiMoreHorizontal />
               </button>
@@ -90,8 +102,19 @@ function Profile({}: Props): ReactElement {
               Maiores, molestias.
             </div>
             <div className={styles.phoneActions}>
-              {!me && <button onClick={followUser}>follow</button>}
-              {!me && <button>message</button>}
+              {!me && (
+                <button onClick={followUser}>
+                  {following ? "unfollow" : "follow"}
+                  {followQuery.isLoading && (
+                    <Facebook color="#1f1f1f" size={20} />
+                  )}
+                </button>
+              )}
+              {/* {!me && <button>message</button>} */}
+              {me && (
+                <button onClick={() => setOpenEdit(true)}>edit profile</button>
+              )}
+
               <button>
                 <FiMoreHorizontal />
               </button>

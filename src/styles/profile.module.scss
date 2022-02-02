@@ -13,10 +13,12 @@
       flex-direction: column;
       align-items: center;
       img {
+        flex-shrink: 0;
         margin-right: 1rem;
         height: 8rem;
         width: 8rem;
         border-radius: 90rem;
+        object-fit: cover;
         border: 1px solid #5a5a5a;
       }
       .details {
@@ -57,15 +59,19 @@
           margin-top: 0.6rem;
           display: grid;
           grid-template-columns: 1fr 1fr auto;
-          grid-column-gap: 0.2rem;
+          grid-column-gap: 0.5rem;
 
           button {
             background-color: inherit;
-            border-radius: 0.2rem;
+            border-radius: 0.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             outline: none;
             border: 1px solid rgb(175, 175, 175);
             font-family: "Inter";
             font-weight: 500;
+            font-size: 1rem;
             cursor: pointer;
             padding: 0.2rem;
           }
@@ -140,7 +146,10 @@
             button {
               display: block;
               background-color: inherit;
-              border-radius: 0.2rem;
+              border-radius: 0.4rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
               outline: none;
               border: 1px solid rgb(175, 175, 175);
               font-family: "Inter";
