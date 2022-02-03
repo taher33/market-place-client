@@ -104,6 +104,7 @@
       a {
         text-decoration: none;
         color: inherit;
+        color: #575757;
         .user {
           position: relative;
           display: flex;
@@ -112,17 +113,6 @@
           padding: 1rem;
           transition: all 0.3s ease-in-out;
 
-          h5 {
-            text-transform: capitalize;
-            font-size: 1.2rem;
-            margin: 0;
-            margin-bottom: 0.3rem;
-          }
-          p {
-            margin: 0;
-            font-weight: 300;
-            font-size: 1rem;
-          }
           img {
             margin-right: 1rem;
             height: 50px;
@@ -130,10 +120,27 @@
             min-width: 50px;
             min-height: 50px;
             border-radius: 50%;
+            object-fit: cover;
+          }
+
+          div {
+            width: 100%;
+
+            h5 {
+              text-transform: capitalize;
+              font-size: 1.2rem;
+              margin: 0;
+              margin-bottom: 0.3rem;
+            }
+            p {
+              margin: 0;
+              font-weight: 300;
+              font-size: 1rem;
+            }
           }
 
           .unread {
-            background-color: rgb(236, 99, 99);
+            background-color: rgb(119, 166, 241);
             height: 0.5rem;
             width: 0.5rem;
             padding: 0.4rem;
@@ -142,7 +149,7 @@
             align-items: center;
             justify-content: center;
             position: absolute;
-            left: 100px;
+            right: 0;
             top: 0;
 
             span {
@@ -172,12 +179,15 @@
 }
 
 .selected {
-  color: white;
-  background-color: $primary-color;
-  padding: 1rem 1rem;
-  border-radius: 900rem;
-  img {
-    outline: white 2px solid;
+  color: black;
+  &::before {
+    content: " ";
+    height: 3rem;
+    width: 5px;
+    background-color: #1d81de;
+    border-radius: 3rem;
+    position: absolute;
+    left: 0;
   }
 }
 

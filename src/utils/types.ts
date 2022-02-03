@@ -17,7 +17,7 @@ export interface Notification {
 }
 
 export interface ChatUser {
-  profileImg?: String;
+  profileImg: string;
   People_I_follow: string[];
   People_that_follow_me: string[];
   email: string;
@@ -56,7 +56,7 @@ export interface Thread {
   _id: string;
   unreadMsg: number;
   productThread: boolean;
-  product: string | Product | undefined;
+  product: Product | undefined;
 }
 
 export interface State {

@@ -28,7 +28,7 @@ function Chat({}: Props): ReactElement {
 
   const { handleSubmit, register, reset } = useForm<MessageForm>();
   const query = getQueryParams();
-  const thread = query.get("id");
+  const thread_id = query.get("id");
   const queryClient = useQueryClient();
 
   const [showUsers, setShowUsers] = useState(true);
@@ -48,7 +48,7 @@ function Chat({}: Props): ReactElement {
     let isSubscibed = true;
 
     socket?.on("private message", ({ msg, threadId }) => {
-      if (threadId === thread && isSubscibed) {
+      if (threadId === thread_id && isSubscibed) {
         let newMessages = [...messages];
         newMessages.push(msg);
         setMessages(newMessages);
@@ -59,7 +59,7 @@ function Chat({}: Props): ReactElement {
     return () => {
       isSubscibed = false;
     };
-  }, [messages, thread, socket, queryClient]);
+  }, [messages, thread_id, socket, queryClient]);
 
   useEffect(() => {
     let payload = {
@@ -83,42 +83,43 @@ function Chat({}: Props): ReactElement {
     })
   );
   // useFull function
+  const readMessages = (messages: Messages[]) => {
+    const unreadMessages = messages
+      .filter((el) => !el.read)
+      .filter((el) => el.sender !== user?._id);
+    return unreadMessages;
+  };
 
   //todo fix the error
   useEffect(() => {
-    const readMessages = (messages: Messages[]) => {
-      const unreadMessages = messages
-        .filter((el) => !el.read)
-        .filter((el) => el.sender !== user?._id);
-      return unreadMessages;
+    if (!user || !thread_id) return;
+    let payload = {
+      threadId: thread_id,
     };
 
-    if (!user || !thread) return;
-    let payload = {
-      threadId: thread,
-    };
+    setSelectedThread(thread_id);
 
     socket?.emit(
       "get previous messages",
       payload,
       ({ status, prevMessages, error }: any) => {
         if (status === "error") return console.log(error);
-        // const unreadMessages = readMessages(prevMessages);
         setMessages(prevMessages);
-        // if (!unreadMessages.length) return;
-        // updateMessages.mutate(unreadMessages);
+        const unreadMessages = readMessages(prevMessages);
+        if (!unreadMessages.length) return;
+        updateMessages.mutate(unreadMessages);
         //all messages are read here
         // setMessages(prevMessages);
       }
     );
-  }, [thread, user]);
+  }, [readMessages, thread_id, updateMessages, user]);
 
   const SendMessage = async (data: MessageForm) => {
-    if (!thread && !user) return;
+    if (!thread_id && !user) return;
     let payload = {
       content: data.content,
       sender: user?._id,
-      threadId: thread,
+      threadId: thread_id,
     };
     socket?.emit(
       "private message",
@@ -212,7 +213,6 @@ function ThreadUi({
   connectedUsers,
 }: ThreadProps) {
   const [unreadMessages, setUnreadMessages] = useState(thread.unreadMsg);
-
   thread.connected = connectedUsers?.includes(thread.client._id);
   //ui
   return (
@@ -225,7 +225,14 @@ function ThreadUi({
         thread._id === selectedUser ? styles.selected : null
       }`}
     >
-      <img src="food.jpg" alt="user" />
+      <img
+        src={
+          thread.productThread
+            ? thread.product?.pictures[0]
+            : thread.client.profileImg
+        }
+        alt="user"
+      />
       <div className={thread.connected ? styles.connectedUser : ""}>
         <h5>{thread.client.name}</h5>
         <p>
@@ -239,7 +246,6 @@ function ThreadUi({
             <span>{unreadMessages}</span>
           </div>
         )}
-        {thread.productThread && <span>product</span>}
       </div>
     </div>
   );
