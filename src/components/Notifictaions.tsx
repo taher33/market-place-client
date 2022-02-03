@@ -43,7 +43,9 @@ function Notifications(props: Props): JSX.Element {
           <div className={styles.loader}>
             <FullPageLoader />
           </div>
-        ) : notifcationsQuery.isSuccess ? (
+        ) : notifcationsQuery.isSuccess && notifications?.length === 0 ? (
+          <p style={{ textAlign: "center" }}>no notifications for now</p>
+        ) : (
           notifications?.map((el) => {
             return (
               <div key={el._id}>
@@ -60,7 +62,7 @@ function Notifications(props: Props): JSX.Element {
               </div>
             );
           })
-        ) : null}
+        )}
       </div>
     </div>
   );
