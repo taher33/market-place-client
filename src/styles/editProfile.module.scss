@@ -126,9 +126,11 @@
   .wrapper {
     .formWrapper {
       flex-direction: row;
+      align-items: flex-start;
 
       .imageWrapper {
         margin-right: 2rem;
+        padding-top: 1.5rem;
 
         img {
           height: 10rem;

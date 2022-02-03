@@ -52,19 +52,19 @@ function EditProfile(props: Props): JSX.Element {
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries("profile");
+        props.setShow(false);
       },
     }
   );
 
   const submitChanges = (data: Form) => {
     editInfo.mutate(data);
-    console.log("form submitted");
   };
 
   //animations
   const springAnmimations = useSpring({
-    from: { opacity: 0, xyz: [0, 200, 0] },
-    to: { opacity: 1, xyz: [0, 0, 0] },
+    from: { opacity: 0, Y: 20 },
+    to: { opacity: 1, Y: 0 },
   });
 
   return (
@@ -99,7 +99,7 @@ function EditProfile(props: Props): JSX.Element {
           <div>
             <label htmlFor="description">description</label>
             <textarea
-              cols={30}
+              cols={60}
               rows={3}
               {...register("description")}
             ></textarea>

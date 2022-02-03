@@ -18,7 +18,7 @@ function Profile({}: Props): ReactElement {
   const userId = getQuery().get("id");
   const router = useHistory();
 
-  const [following, setFollowing] = useState<boolean>(false);
+  const [following, setFollowing] = useState<boolean | undefined>(false);
   const [openEdit, setOpenEdit] = useState<boolean>(false);
 
   const followUser = async () => {
@@ -37,7 +37,8 @@ function Profile({}: Props): ReactElement {
         url: "users/" + userId,
       }),
     {
-      onSuccess: (data) => user?.People_I_follow.includes(data?.data.user._id),
+      onSuccess: (data) =>
+        setFollowing(user?.People_I_follow.includes(data?.data.user._id)),
     }
   );
 
@@ -97,9 +98,7 @@ function Profile({}: Props): ReactElement {
               </p>
             </div>
             <div className={styles.about}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis,
-              nihil. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Maiores, molestias.
+              {profile.data?.data.user.description}
             </div>
             <div className={styles.phoneActions}>
               {!me && (
@@ -121,7 +120,7 @@ function Profile({}: Props): ReactElement {
             </div>
           </div>
         </div>
-        {/* <div className={styles.divider}></div> */}
+        <div className={styles.divider}></div>
         <div className={styles.products}>
           {isLoading ? (
             <h2>loading</h2>
