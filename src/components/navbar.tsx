@@ -31,13 +31,17 @@ function Navbar({}: Props): ReactElement {
   };
 
   useEffect(() => {
-    if (!location.startsWith("chat")) {
-      socket?.on("private message", ({ msg }) => {
-        console.log("toast 1");
-        createAtoast(msg);
-      });
+    let cancel = false;
+    if (!cancel) {
+      if (!location.startsWith("/chat")) {
+        socket?.on("private message", ({ msg }) => {
+          createAtoast(msg);
+        });
+      }
     }
-    return;
+    return () => {
+      cancel = false;
+    };
   }, [location, socket]);
 
   return (
@@ -59,20 +63,15 @@ function Navbar({}: Props): ReactElement {
           </button>
         </div>
         <div className={styles.links}>
-          {
-            //! remove this here: the h3, look for the design.
-          }
-          {user?.name ? (
-            <h3 style={{ margin: 0 }}>{user?.name}</h3>
-          ) : (
+          {user?.name ? null : (
             <>
               <Link to="/signup">sign up</Link>
               <Link to="/login">login</Link>
             </>
           )}
         </div>
-        <div className={styles.notification}>
-          {user?.name && (
+        {user?.name && (
+          <div className={styles.notification}>
             <button
               onClick={() => setNotifications(!notifications)}
               className={styles.notificationsbtn}
@@ -83,11 +82,11 @@ function Navbar({}: Props): ReactElement {
                 <IoIosNotificationsOutline />
               )}
             </button>
-          )}
-          {notifications && (
-            <Notifictaions setShow={setNotifications} show={notifications} />
-          )}
-        </div>
+            {notifications && (
+              <Notifictaions setShow={setNotifications} show={notifications} />
+            )}
+          </div>
+        )}
         <div className={styles.svgMenu}>
           <BiMenu onClick={() => setShow(!show)} />
           {show && <PhoneMenu setShow={setShow} show={show} />}
