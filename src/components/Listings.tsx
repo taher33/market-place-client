@@ -10,15 +10,16 @@ import { Product } from "../utils/types";
 interface Props {
   name: String;
   seeMore?: boolean;
+  query?: string;
 }
 
-function Listings({ name, seeMore }: Props): ReactElement {
+function Listings({ name, seeMore, query }: Props): ReactElement {
   const router = useHistory();
-
-  const { data, isError, isLoading } = useQuery("products", () =>
+  if (!query) query = "";
+  const { data, isError, isLoading } = useQuery(["products", name], () =>
     axios_instance(true)({
       method: "GET",
-      url: "/products",
+      url: "/products" + query,
     })
   );
 
@@ -37,6 +38,10 @@ function Listings({ name, seeMore }: Props): ReactElement {
           <h2 className={styles.errorState}>
             sorry but something went wrong <span>🤕</span> please try reloading
           </h2>
+        ) : data?.data.products.length === 0 && !isLoading ? (
+          <p style={{ fontSize: "1.2rem" }}>
+            sorry but this section seems to be empty
+          </p>
         ) : (
           data?.data.products.map((product: Product) => (
             <div key={product._id} className={styles.item}>

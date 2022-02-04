@@ -11,7 +11,8 @@ interface Props {
 function Message({ myMessage, content, lastMessage }: Props): ReactElement {
   const tailMessage = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (lastMessage) tailMessage.current!.scrollIntoView();
+    if (lastMessage)
+      tailMessage.current!.scrollIntoView({ behavior: "smooth" });
   }, [lastMessage]);
   return (
     <div

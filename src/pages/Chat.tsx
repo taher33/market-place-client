@@ -33,7 +33,6 @@ function Chat({}: Props): ReactElement {
 
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
-  const [Threads, setThreads] = useState<Thread[]>([]);
   const [connectedUsers, setConnectedUsers] = useState<string[]>();
   const [selectedUser, setSelectedThread] = useState<string | null>(null);
 
@@ -127,10 +126,7 @@ function Chat({}: Props): ReactElement {
       payload,
       (res: { status: string; msg: any; error: any }) => {
         if (res.status === "error") return console.error(res.error);
-        setMessages((prev) => {
-          prev.push(res.msg);
-          return prev;
-        });
+        setMessages([...messages, res.msg]);
       }
     );
     reset();
@@ -151,7 +147,7 @@ function Chat({}: Props): ReactElement {
         </div>
         {showUsers && (
           <ChatPeople
-            ChatUsers={Threads}
+            ChatUsers={threadQuery?.data?.data.newThread}
             show={showUsers}
             setShow={setShowUsers}
           />

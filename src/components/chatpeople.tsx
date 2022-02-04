@@ -23,6 +23,7 @@ export function ChatPeople({ setShow, ChatUsers }: Props) {
               selectedId={selectedUser}
               setSelected={setSelectedUser}
               user={user.client}
+              thread_id={user._id}
             />
           );
         })}
@@ -36,19 +37,21 @@ interface UserProps {
   setSelected: React.Dispatch<React.SetStateAction<null | string>>;
   setShow?: React.Dispatch<React.SetStateAction<boolean>>;
   user: ChatUser;
+  thread_id: string;
 }
 
 export function User({
   setSelected,
   selectedId,
   setShow,
+  thread_id,
   user,
 }: UserProps): JSX.Element {
   return (
-    <Link key={user._id} to={"/chat?id=" + user._id}>
+    <Link key={user._id} to={"/chat?id=" + thread_id}>
       <div
         onClick={() => {
-          setSelected(user._id);
+          setSelected(thread_id);
           setShow!(false);
         }}
         className={`${styles.user} ${

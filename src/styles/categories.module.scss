@@ -23,20 +23,32 @@
     .options {
       margin-top: 2rem;
       display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      flex-direction: row;
-      justify-content: space-between;
+      flex-direction: column;
+      .selects {
+        display: flex;
+        justify-content: space-between;
 
-      .sort {
-        select {
-          padding: 0.5rem 0.6rem;
-          font-family: "Inter";
-          text-transform: capitalize;
-          font-size: 1rem;
-          outline: none;
-          border: rgb(182, 182, 182) 1px solid;
-          border-radius: 0.3rem;
+        .sort {
+          select {
+            padding: 0.5rem 0.6rem;
+            font-family: "Inter";
+            text-transform: capitalize;
+            font-size: 1rem;
+            outline: none;
+            border: rgb(182, 182, 182) 1px solid;
+            border-radius: 0.3rem;
+          }
+        }
+        .dropDown {
+          select {
+            padding: 0.5rem 0.6rem;
+            font-family: "Inter";
+            text-transform: capitalize;
+            font-size: 1rem;
+            outline: none;
+            border: rgb(182, 182, 182) 1px solid;
+            border-radius: 0.3rem;
+          }
         }
       }
 
@@ -47,24 +59,14 @@
         background-color: rgb(211, 211, 211);
       }
 
-      .dropDown {
-        select {
-          padding: 0.5rem 0.6rem;
-          font-family: "Inter";
-          text-transform: capitalize;
-          font-size: 1rem;
-          outline: none;
-          border: rgb(182, 182, 182) 1px solid;
-          border-radius: 0.3rem;
-        }
-      }
-
       .categories {
         margin-top: 1.5rem;
         margin-bottom: 3rem;
         display: flex;
         overflow-x: scroll;
         max-width: 100vw;
+        margin-left: auto;
+        margin-right: auto;
         a {
           margin-right: 1.5rem;
           font-size: 1.1rem;

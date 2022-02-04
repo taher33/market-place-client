@@ -23,7 +23,6 @@ function Categories({}: Props): ReactElement {
   const sort = watch("sort");
 
   const fetchProjects = async ({ pageParam = 1 }) => {
-    console.log(pageParam);
     const res = await axios_instance(true)({
       url:
         "products?" +
@@ -70,12 +69,21 @@ function Categories({}: Props): ReactElement {
       </aside>
       <main>
         <div className={styles.options}>
-          <div className={styles.dropDown}>
-            <select {...register("select")}>
-              <option value="following">following</option>
-              <option value="new">new</option>
-              <option value="popular">popular</option>
-            </select>
+          <div className={styles.selects}>
+            <div className={styles.dropDown}>
+              <select {...register("select")}>
+                <option value="following">following</option>
+                <option value="new">new</option>
+                <option value="popular">popular</option>
+              </select>
+            </div>
+            <div className={styles.sort}>
+              <span>sort by :</span>
+              <select {...register("sort")}>
+                <option value="price">price</option>
+                <option value="rating">rating</option>
+              </select>
+            </div>
           </div>
           <div className={styles.categories}>
             <Link to="/categories">all</Link>
@@ -84,13 +92,6 @@ function Categories({}: Props): ReactElement {
             <Link to="?categorie=sports">sports</Link>
             <Link to="?categorie=games">games</Link>
             <Link to="?categorie=automobile">automobile</Link>
-          </div>
-          <div className={styles.sort}>
-            <span>sort by :</span>
-            <select {...register("sort")}>
-              <option value="price">price</option>
-              <option value="rating">rating</option>
-            </select>
           </div>
         </div>
         {status === "loading" ? (
@@ -101,6 +102,10 @@ function Categories({}: Props): ReactElement {
           <h2 className={styles.errorState}>
             sorry but something went wrong <span>🤕</span> please try reloading
           </h2>
+        ) : status === "success" && data?.pages[0].products.length === 0 ? (
+          <p style={{ fontSize: "1.2rem" }}>
+            sorry but there seem to be no items in this categorie
+          </p>
         ) : (
           <div className={styles.listings}>
             {data?.pages.map((group) => {

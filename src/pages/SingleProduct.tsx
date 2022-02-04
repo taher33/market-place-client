@@ -151,12 +151,17 @@ function SingleProduct({}: Props): ReactElement {
           <div className={styles.user}>
             <img src={product.seller.profileImg} alt="user" />
             <p>{product.seller.name}</p>
-            <button onClick={followUser} disabled={followQuery.isLoading}>
+            <button
+              onClick={followUser}
+              disabled={
+                followQuery.isLoading || user?._id === product.seller._id
+              }
+            >
               {following ? "unfollow" : "follow"}
               {followQuery.isLoading && <Facebook color="#1d81de" size={20} />}
             </button>
           </div>
-          <p className={styles.dateSince}>has been a seeler since 2065</p>
+          {/* <p className={styles.dateSince}>has been a seeler since 2065</p> */}
           <h4>Details</h4>
           <div className={styles.detail}>
             {product.condition && (

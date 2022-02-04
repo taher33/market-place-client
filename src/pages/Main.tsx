@@ -15,9 +15,12 @@ function Main({}: Props): ReactElement {
         </aside>
         <main>
           <div className={styles.listings}>
-            <Listings name="Featured" seeMore />
-            <Listings name="newest on the market" seeMore />
-            <Listings name="recomended" />
+            <Listings name="Featured" />
+            <Listings name="newest on the market" />
+            <Listings
+              name="from your sellers you're following"
+              query="?following=true"
+            />
           </div>
         </main>
       </div>
