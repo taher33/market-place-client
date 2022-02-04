@@ -66,14 +66,14 @@
         outline: none;
         outline: none;
         border: none;
-        border-bottom: $primary-color 1px solid;
+        border-bottom: $secondary-color 1px solid;
       }
       button {
         font-family: "inter";
         color: white;
         border: none;
         outline: none;
-        background-color: $primary-color;
+        background-color: $secondary-color;
         cursor: pointer;
         border-radius: 0.31rem;
         padding: 0.3rem 1rem;
@@ -128,7 +128,8 @@
 
             h5 {
               text-transform: capitalize;
-              font-size: 1.2rem;
+              font-size: 1.1rem;
+              font-weight: 500;
               margin: 0;
               margin-bottom: 0.3rem;
             }
@@ -171,7 +172,7 @@
     max-width: $max-container-width;
     margin: 0 auto;
 
-    grid-template-columns: 1fr 2.5fr 1fr;
+    grid-template-columns: 1fr 2.5fr auto;
     aside {
       display: block;
     }

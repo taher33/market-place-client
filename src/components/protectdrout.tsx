@@ -19,7 +19,15 @@ const ProtectRoute = ({ children, loading, ...rest }: Props) => {
       {...rest}
       render={() =>
         loading ? (
-          <FullPageLoader />
+          <div
+            style={{
+              display: "flex",
+              marginTop: "2rem",
+              justifyContent: "center",
+            }}
+          >
+            <FullPageLoader />
+          </div>
         ) : isLogedIn ? (
           children
         ) : (
