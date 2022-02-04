@@ -91,6 +91,7 @@ function Chat({}: Props): ReactElement {
   };
 
   //todo fix the error
+  //todo chnage to react-query
   useEffect(() => {
     if (!user || !thread_id) return;
     let payload = {
@@ -126,9 +127,10 @@ function Chat({}: Props): ReactElement {
       payload,
       (res: { status: string; msg: any; error: any }) => {
         if (res.status === "error") return console.error(res.error);
-        let newMessages = [...messages];
-        newMessages.push(res.msg);
-        setMessages(newMessages);
+        setMessages((prev) => {
+          prev.push(res.msg);
+          return prev;
+        });
       }
     );
     reset();
