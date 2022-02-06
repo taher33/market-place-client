@@ -82,14 +82,12 @@ function Navbar({}: Props): ReactElement {
                 <IoIosNotificationsOutline />
               )}
             </button>
-            {notifications && (
-              <Notifictaions setShow={setNotifications} show={notifications} />
-            )}
+            <Notifictaions setShow={setNotifications} show={notifications} />
           </div>
         )}
         <div className={styles.svgMenu}>
           <BiMenu onClick={() => setShow(!show)} />
-          {show && <PhoneMenu setShow={setShow} show={show} />}
+          <PhoneMenu setShow={setShow} show={show} />
         </div>
       </div>
     </>

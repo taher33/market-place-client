@@ -65,11 +65,11 @@ function Profile({}: Props): ReactElement {
 
   return (
     <div className={styles.container}>
+      {openEdit && <EditProfile setShow={setOpenEdit} show={openEdit} />}
       <aside>
         <SidebarFeed />
       </aside>
       <div className={styles.profileWrapper}>
-        {openEdit && <EditProfile setShow={setOpenEdit} show={openEdit} />}
         <div className={styles.userDesc}>
           <img src={profile.data?.data.user.profileImg} alt="user" />
           <div className={styles.details}>

@@ -66,8 +66,8 @@ function EditProfile(props: Props): JSX.Element {
 
   //animations
   const springAnmimations = useSpring({
-    from: { opacity: 0, Y: 20 },
-    to: { opacity: 1, Y: 0 },
+    from: { opacity: 0, y: 20 },
+    to: { opacity: 1, y: 0 },
   });
 
   return (

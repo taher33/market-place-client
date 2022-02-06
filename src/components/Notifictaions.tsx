@@ -9,7 +9,7 @@ import FullPageLoader from "./fullPageLoader";
 import { Notification } from "../utils/types";
 import { trimStrings } from "../utils/useFullFunctions";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import { animated, useSpring } from "react-spring";
+import { animated, useTransition, easings } from "react-spring";
 
 interface Props {
   show: boolean;
@@ -30,42 +30,57 @@ function Notifications(props: Props): JSX.Element {
       onSuccess: (data) => setNotifications(data.data.notifications),
     }
   );
+  //animations
+  const transitions = useTransition(props.show, {
+    from: { opacity: 0, y: 50 },
+    enter: { opacity: 1, y: 0 },
+    leave: { opacity: 0, y: 100 },
+    reverse: props.show,
+
+    config: {
+      duration: 200,
+      ease: easings.easeInOutQuart,
+    },
+  });
 
   //ui
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.header}>
-        <h3>notifications</h3>
-        <AiOutlineClose onClick={() => props.setShow(false)} />
-      </div>
-      <div className={styles.lineBreak}></div>
-      <div className={styles.notificationsWrapper}>
-        {notifcationsQuery.isLoading ? (
-          <div className={styles.loader}>
-            <FullPageLoader />
+  return transitions(
+    (SpringStyles, item) =>
+      item && (
+        <animated.div style={SpringStyles} className={styles.wrapper}>
+          <div className={styles.header}>
+            <h3>notifications</h3>
+            <AiOutlineClose onClick={() => props.setShow(false)} />
           </div>
-        ) : notifcationsQuery.isSuccess && notifications?.length === 0 ? (
-          <p style={{ textAlign: "center" }}>no notifications for now</p>
-        ) : (
-          notifications?.map((el) => {
-            return (
-              <div key={el._id}>
-                <Link to="#">
-                  <img src={el.creator.profileImg} alt="profile" />
-                  <div className={styles.text}>
-                    <h4>{el.creator.name} </h4>
-                    <p>{trimStrings(el.body, 35)}</p>
-                  </div>
-                  <div className={styles.actions}>
-                    <HiOutlineDotsHorizontal />
-                  </div>
-                </Link>
+          <div className={styles.lineBreak}></div>
+          <div className={styles.notificationsWrapper}>
+            {notifcationsQuery.isLoading ? (
+              <div className={styles.loader}>
+                <FullPageLoader />
               </div>
-            );
-          })
-        )}
-      </div>
-    </div>
+            ) : notifcationsQuery.isSuccess && notifications?.length === 0 ? (
+              <p style={{ textAlign: "center" }}>no notifications for now</p>
+            ) : (
+              notifications?.map((el) => {
+                return (
+                  <div key={el._id}>
+                    <Link to="#">
+                      <img src={el.creator.profileImg} alt="profile" />
+                      <div className={styles.text}>
+                        <h4>{el.creator.name} </h4>
+                        <p>{trimStrings(el.body, 35)}</p>
+                      </div>
+                      <div className={styles.actions}>
+                        <HiOutlineDotsHorizontal />
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </animated.div>
+      )
   );
 }
 
