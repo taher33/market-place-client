@@ -9,6 +9,7 @@ import FullPageLoader from "./fullPageLoader";
 import { Notification } from "../utils/types";
 import { trimStrings } from "../utils/useFullFunctions";
 import { HiOutlineDotsHorizontal } from "react-icons/hi";
+import { animated, useSpring } from "react-spring";
 
 interface Props {
   show: boolean;

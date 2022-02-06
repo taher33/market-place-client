@@ -15,7 +15,7 @@ export function ChatPeople({ setShow, ChatUsers }: Props) {
   return (
     <div onClick={() => setShow(false)} className={styles.container}>
       <div onClick={(e) => e.stopPropagation()} className={styles.sidebar}>
-        {ChatUsers.map((user) => {
+        {ChatUsers?.map((user) => {
           return (
             <User
               setShow={setShow}

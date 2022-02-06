@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "react-query";
 import styles from "../styles/editProfile.module.scss";
 import { axios_instance } from "../utils/axios";
 import { useAppContext } from "../utils/context";
+import { Facebook } from "react-spinners-css";
 
 interface Props {
   show: boolean;
@@ -40,7 +41,9 @@ function EditProfile(props: Props): JSX.Element {
             fd.append(key, file);
           }
         } else {
-          fd.append(key, data[key]);
+          if (data[key]) {
+            fd.append(key, data[key]);
+          }
         }
       }
       return axios_instance(true)({
@@ -123,6 +126,7 @@ function EditProfile(props: Props): JSX.Element {
           className={styles.action + " " + styles.primary}
         >
           save changes
+          {editInfo.isLoading && <Facebook color="#ffffff" size={15} />}
         </button>
       </div>
     </animated.div>
