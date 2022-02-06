@@ -6,13 +6,13 @@
   background-color: white;
   padding-bottom: 1rem;
   z-index: 23;
-  background-color: #ffffff;
 
-  padding-top: 1.5rem;
+  padding-top: 1rem;
   display: flex;
   align-items: center;
   padding-left: $padding-phone;
   padding-right: $padding-phone;
+  justify-content: space-between;
   img {
     z-index: 2002;
     cursor: pointer;
@@ -21,7 +21,7 @@
 
   .svgMenu {
     width: fit-content;
-    margin-left: 1rem;
+    // margin-left: 1rem;
     svg {
       font-size: 2rem;
       cursor: pointer;
