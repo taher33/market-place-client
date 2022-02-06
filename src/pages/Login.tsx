@@ -2,10 +2,12 @@ import React, { ReactElement } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import "react-toastify/dist/ReactToastify.css";
 
 import styles from "../styles/signup.module.scss";
 import { axios_instance } from "../utils/axios";
 import { useAppContext } from "../utils/context";
+import { toast, ToastContainer } from "react-toastify";
 
 interface Props {}
 interface Form {
@@ -31,6 +33,7 @@ function Signup({}: Props): ReactElement {
       },
       onSuccess: (data) => {
         setUser(data.data.user);
+        toast("you are loged in", { type: "success", position: "top-right" });
         let payload = {
           user: data.data.user,
         };
@@ -38,7 +41,12 @@ function Signup({}: Props): ReactElement {
           "connect to server",
           payload,
           (res: { status: string; error: any }) => {
-            if (res.status === "error") return console.log(res.error);
+            if (res.status === "error") {
+              toast("for some reason you can not use chat", {
+                type: "error",
+              });
+              return;
+            }
             router.push("/");
           }
         );
@@ -52,6 +60,7 @@ function Signup({}: Props): ReactElement {
 
   return (
     <div className={styles.container}>
+      <ToastContainer autoClose={2} />
       <div>
         <h2>Welcome back</h2>
         <p>

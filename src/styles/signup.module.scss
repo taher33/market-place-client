@@ -5,6 +5,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 1rem;
+  padding-bottom: 5rem;
   h2 {
     font-size: 45px;
     font-weight: 700;
@@ -20,7 +21,7 @@
 
     a {
       text-decoration: none;
-      color: $primary-color;
+      color: $secondary-color;
       font-weight: 600;
     }
   }
@@ -64,7 +65,7 @@
       border: none;
       padding: 1rem 3rem;
       cursor: pointer;
-      background-color: $primary-color;
+      background-color: $secondary-color;
       font-size: 20px;
       font-weight: 600;
       color: white;
