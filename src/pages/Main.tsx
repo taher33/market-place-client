@@ -18,7 +18,7 @@ function Main({}: Props): ReactElement {
             <Listings name="Featured" />
             <Listings name="newest on the market" />
             <Listings
-              name="from your sellers you're following"
+              name="from sellers you're following"
               query="?following=true"
             />
           </div>

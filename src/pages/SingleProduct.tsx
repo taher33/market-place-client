@@ -112,6 +112,7 @@ function SingleProduct({}: Props): ReactElement {
           <div className={styles.btns}>
             {product.pictures.map((el, id) => (
               <pre
+                key={id}
                 className={index === id ? styles.selected : ""}
                 id={"" + id}
                 onClick={() => slide(id)}

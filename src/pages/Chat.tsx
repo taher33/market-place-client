@@ -12,8 +12,6 @@ import { useQuery as getQueryParams } from "../utils/usequery";
 import { axios_instance } from "../utils/axios";
 import { trimStrings } from "../utils/useFullFunctions";
 import { BiArrowBack, BiGridSmall } from "react-icons/bi";
-import { userInfo } from "os";
-import { threadId } from "worker_threads";
 
 interface Props {}
 interface MessageForm {
@@ -23,7 +21,7 @@ interface GetUsersType {
   status: string;
   Connectedusers: string[];
 }
-function Chat({}: Props): ReactElement {
+function Chat({}: Props): JSX.Element {
   const { user, socket } = useAppContext();
 
   const { handleSubmit, register, reset } = useForm<MessageForm>();
@@ -34,7 +32,7 @@ function Chat({}: Props): ReactElement {
   const [showUsers, setShowUsers] = useState(true);
   const [messages, setMessages] = useState<Messages[]>([]);
   const [connectedUsers, setConnectedUsers] = useState<string[]>();
-  const [selectedUser, setSelectedThread] = useState<string | null>(null);
+  const [selectedThread, setSelectedThread] = useState<Thread>();
 
   const threadQuery = useQuery(["threads"], () =>
     axios_instance(true)({
@@ -91,13 +89,28 @@ function Chat({}: Props): ReactElement {
 
   //todo fix the error
   //todo chnage to react-query
+
+  // const partnerQuery = useQuery(["partner", threadId], () =>
+  //   axios_instance(true)({
+  //     method: "GET",
+  //     url: "users/thread/one",
+  //     data: { thread_id: threadId },
+  //   })
+  // );
+  console.log("thread", selectedThread);
   useEffect(() => {
-    if (!user || !thread_id) return;
+    if (!user?._id || !thread_id) return;
+
     let payload = {
       threadId: thread_id,
     };
 
-    setSelectedThread(thread_id);
+    console.log("here in useEffect", threadQuery.data?.data);
+    setSelectedThread(
+      threadQuery.data?.data.newThread.filter(
+        (el: Thread) => el._id === thread_id
+      )[0]
+    );
 
     socket?.emit(
       "get previous messages",
@@ -106,13 +119,16 @@ function Chat({}: Props): ReactElement {
         if (status === "error") return console.log(error);
         setMessages(prevMessages);
         const unreadMessages = readMessages(prevMessages);
+
         if (!unreadMessages.length) return;
+
         updateMessages.mutate(unreadMessages);
+
         //all messages are read here
         // setMessages(prevMessages);
       }
     );
-  }, [readMessages, thread_id, updateMessages, user]);
+  }, [thread_id, user?._id]);
 
   const SendMessage = async (data: MessageForm) => {
     if (!thread_id && !user) return;
@@ -147,9 +163,11 @@ function Chat({}: Props): ReactElement {
         </div>
         {showUsers && (
           <ChatPeople
-            ChatUsers={threadQuery?.data?.data.newThread}
+            setSelectedThread={setSelectedThread}
+            threads={threadQuery?.data?.data.newThread}
             show={showUsers}
             setShow={setShowUsers}
+            thread_id={thread_id}
           />
         )}
       </div>
@@ -159,6 +177,7 @@ function Chat({}: Props): ReactElement {
           {messages &&
             messages.map((message, id) => (
               <Message
+                // partner={message.sender}
                 key={id}
                 content={message.content}
                 myMessage={user?._id === message.sender}
@@ -183,8 +202,9 @@ function Chat({}: Props): ReactElement {
           threadQuery.data.data.newThread.map((thread: Thread) => (
             <Link key={thread._id} to={"/chat?id=" + thread._id}>
               <ThreadUi
+                thread_id={thread_id}
                 thread={thread}
-                selectedUser={selectedUser}
+                selectedUser={selectedThread}
                 setSelectedThread={setSelectedThread}
                 connectedUsers={connectedUsers}
               />
@@ -199,8 +219,9 @@ export default Chat;
 
 interface ThreadProps {
   thread: Thread;
-  selectedUser: string | null;
-  setSelectedThread: React.Dispatch<React.SetStateAction<string | null>>;
+  thread_id: string | null;
+  selectedUser: Thread | undefined;
+  setSelectedThread: React.Dispatch<React.SetStateAction<Thread | undefined>>;
   connectedUsers: string[] | undefined;
 }
 
@@ -209,18 +230,20 @@ function ThreadUi({
   setSelectedThread,
   selectedUser,
   connectedUsers,
+  thread_id,
 }: ThreadProps) {
   const [unreadMessages, setUnreadMessages] = useState(thread.unreadMsg);
   thread.connected = connectedUsers?.includes(thread.client._id);
+
   //ui
   return (
     <div
       onClick={() => {
-        setSelectedThread(thread._id);
+        setSelectedThread(thread);
         setUnreadMessages(0);
       }}
       className={`${styles.user} ${
-        thread._id === selectedUser ? styles.selected : null
+        thread._id === selectedUser?._id ? styles.selected : null
       }`}
     >
       <img

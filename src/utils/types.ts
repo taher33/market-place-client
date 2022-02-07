@@ -57,6 +57,7 @@ export interface Thread {
   unreadMsg: number;
   productThread: boolean;
   product: Product | undefined;
+  messages: Messages[];
 }
 
 export interface State {

@@ -8,22 +8,27 @@ import { ChatUser, Thread } from "../utils/types";
 interface Props {
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  ChatUsers: Thread[];
+  threads: Thread[];
+  setSelectedThread: React.Dispatch<React.SetStateAction<Thread | undefined>>;
+  thread_id: string | null;
 }
-export function ChatPeople({ setShow, ChatUsers }: Props) {
-  const [selectedUser, setSelectedUser] = useState<string | null>(null);
+export function ChatPeople({
+  thread_id,
+  setShow,
+  threads,
+  setSelectedThread,
+}: Props) {
   return (
     <div onClick={() => setShow(false)} className={styles.container}>
       <div onClick={(e) => e.stopPropagation()} className={styles.sidebar}>
-        {ChatUsers?.map((user) => {
+        {threads?.map((thread) => {
           return (
             <User
+              thread_id={thread_id}
               setShow={setShow}
-              key={user._id}
-              selectedId={selectedUser}
-              setSelected={setSelectedUser}
-              user={user.client}
-              thread_id={user._id}
+              key={thread._id}
+              setSelectedThread={setSelectedThread}
+              thread={thread}
             />
           );
         })}
@@ -33,34 +38,32 @@ export function ChatPeople({ setShow, ChatUsers }: Props) {
 }
 
 interface UserProps {
-  selectedId: string | null;
-  setSelected: React.Dispatch<React.SetStateAction<null | string>>;
+  setSelectedThread: React.Dispatch<React.SetStateAction<Thread | undefined>>;
+  thread: Thread;
   setShow?: React.Dispatch<React.SetStateAction<boolean>>;
-  user: ChatUser;
-  thread_id: string;
+  thread_id: string | null;
 }
 
 export function User({
-  setSelected,
-  selectedId,
   setShow,
+  setSelectedThread,
+  thread,
   thread_id,
-  user,
 }: UserProps): JSX.Element {
   return (
-    <Link key={user._id} to={"/chat?id=" + thread_id}>
+    <Link key={thread._id} to={"/chat?id=" + thread._id}>
       <div
         onClick={() => {
-          setSelected(thread_id);
+          setSelectedThread(thread);
           setShow!(false);
         }}
         className={`${styles.user} ${
-          user._id === selectedId ? styles.selected : null
+          thread._id === thread_id ? styles.selected : null
         }`}
       >
-        <img src="food.jpg" alt="user" />
-        <div className={user.connected ? styles.connectedUser : ""}>
-          <h5>{user.name}</h5>
+        <img src={thread.client.profileImg} alt="thread" />
+        <div className={thread.connected ? styles.connectedUser : ""}>
+          <h5>{thread.client.name}</h5>
         </div>
         <HiOutlineDotsHorizontal />
       </div>
