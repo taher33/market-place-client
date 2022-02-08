@@ -10,12 +10,13 @@ import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import SingleProduct from "./pages/SingleProduct";
-import { AppContext } from "./utils/context";
+import { AppContext, searchCtx } from "./utils/context";
 import io, { Socket } from "socket.io-client";
 import { useQuery } from "react-query";
 import { axios_instance } from "./utils/axios";
 import { Response, User } from "./utils/types";
 import Upload from "./pages/Upload";
+import Search from "./pages/Search";
 
 function App(): JSX.Element {
   const [user, setUser] = useState<User>();
@@ -54,40 +55,50 @@ function App(): JSX.Element {
       },
     }
   );
+
+  const [search, setSearch] = useState<string>();
+
   return (
     <AppContext.Provider value={{ user, setUser, socket, setSocket }}>
-      <div>
-        <Navbar />
-        <Scrolltotop />
-        <Switch>
-          <Route path="/" exact>
-            <Landing />
-          </Route>
-          <ProtectRoute loading={isLoading} path="/profile">
-            <Profile />
-          </ProtectRoute>
+      <searchCtx.Provider value={{ search }}>
+        <div>
+          <Navbar setSearch={setSearch} />
+          <Scrolltotop />
+          <Switch>
+            <Route path="/" exact>
+              <Landing />
+            </Route>
+            <ProtectRoute loading={isLoading} path="/profile">
+              <Profile />
+            </ProtectRoute>
 
-          <ProtectRoute loading={isLoading} path="/upload">
-            <Upload />
-          </ProtectRoute>
+            <ProtectRoute loading={isLoading} path="/upload">
+              <Upload />
+            </ProtectRoute>
 
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route path="/product">
-            <SingleProduct />
-          </Route>
-          <ProtectRoute loading={isLoading} path="/chat">
-            <Chat />
-          </ProtectRoute>
-          <Route path="/categories">
-            <Categories />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-        </Switch>
-      </div>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+
+            <Route path="/search">
+              <Search />
+            </Route>
+
+            <Route path="/product">
+              <SingleProduct />
+            </Route>
+            <ProtectRoute loading={isLoading} path="/chat">
+              <Chat />
+            </ProtectRoute>
+            <Route path="/categories">
+              <Categories />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+          </Switch>
+        </div>
+      </searchCtx.Provider>
     </AppContext.Provider>
   );
 }

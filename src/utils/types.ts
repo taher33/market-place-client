@@ -8,6 +8,9 @@ export interface Messages {
   read: boolean;
 }
 
+export interface Search {
+  search?: string;
+}
 export interface Notification {
   creator: User;
   body: string;

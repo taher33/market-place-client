@@ -72,8 +72,8 @@ function Categories({}: Props): ReactElement {
           <div className={styles.selects}>
             <div className={styles.dropDown}>
               <select {...register("select")}>
-                <option value="following">following</option>
                 <option value="new">new</option>
+                <option value="following">following</option>
                 <option value="popular">popular</option>
               </select>
             </div>

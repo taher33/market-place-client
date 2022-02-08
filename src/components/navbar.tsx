@@ -4,28 +4,36 @@ import { Link, useHistory } from "react-router-dom";
 import { GrSearch } from "react-icons/gr";
 import { IoIosNotifications, IoIosNotificationsOutline } from "react-icons/io";
 import { BiMenu } from "react-icons/bi";
-import styles from "../styles/navbar.module.scss";
 import { PhoneMenu } from "./phonemenu";
 import { useAppContext } from "../utils/context";
 import Notifictaions from "./Notifictaions";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Messages } from "../utils/types";
+import { Messages, Search } from "../utils/types";
 import { trimStrings } from "../utils/useFullFunctions";
+import "react-toastify/dist/ReactToastify.css";
+import styles from "../styles/navbar.module.scss";
+import { useForm } from "react-hook-form";
 
-interface Props {}
+interface Props {
+  setSearch: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
 
-function Navbar({}: Props): ReactElement {
+function Navbar({ setSearch }: Props): ReactElement {
   const { user, socket } = useAppContext();
   const [show, setShow] = useState(false);
   const [notifications, setNotifications] = useState(false);
   const router = useHistory();
   const location = router.location.pathname;
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, isValid },
+  } = useForm<Search>();
 
   const createAtoast = (msg: Messages) => {
     toast("new message : " + trimStrings(msg.content, 20), {
       position: "bottom-right",
-      autoClose: 5000,
+      autoClose: 3000,
       closeOnClick: true,
     });
   };
@@ -44,6 +52,11 @@ function Navbar({}: Props): ReactElement {
     };
   }, [location, socket]);
 
+  const onSearch = (data: Search) => {
+    router.push("/search");
+    setSearch(data.search);
+  };
+
   return (
     <>
       <ToastContainer
@@ -56,12 +69,16 @@ function Navbar({}: Props): ReactElement {
         <Link to="/" onClick={() => setShow(false)}>
           <img src="logo.png" alt="logo" />
         </Link>
-        <div className={styles.searchBar}>
-          <input type="search" />
-          <button>
+        <form onSubmit={handleSubmit(onSearch)} className={styles.searchBar}>
+          <input
+            {...register("search", { minLength: 4 })}
+            type="search"
+            placeholder="name of the product"
+          />
+          <button disabled={isSubmitting || !isValid} type="submit">
             <GrSearch />
           </button>
-        </div>
+        </form>
         <div className={styles.links}>
           {user?.name ? null : (
             <>
