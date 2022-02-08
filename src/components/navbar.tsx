@@ -73,7 +73,7 @@ function Navbar({ setSearch }: Props): ReactElement {
           <input
             {...register("search", { minLength: 4 })}
             type="search"
-            placeholder="name of the product"
+            placeholder="search for products"
           />
           <button disabled={isSubmitting || !isValid} type="submit">
             <GrSearch />
