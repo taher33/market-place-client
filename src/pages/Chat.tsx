@@ -34,11 +34,21 @@ function Chat({}: Props): JSX.Element {
   const [connectedUsers, setConnectedUsers] = useState<string[]>();
   const [selectedThread, setSelectedThread] = useState<Thread>();
 
-  const threadQuery = useQuery(["threads"], () =>
-    axios_instance(true)({
-      url: "users/threads",
-      method: "GET",
-    })
+  const threadQuery = useQuery(
+    ["threads"],
+    () =>
+      axios_instance(true)({
+        url: "users/threads",
+        method: "GET",
+      }),
+    {
+      onSuccess: (data) => {
+        if (thread_id)
+          setSelectedThread(
+            data.data.newThread.filter((el: Thread) => el._id === thread_id)[0]
+          );
+      },
+    }
   );
 
   useEffect(() => {
@@ -90,14 +100,6 @@ function Chat({}: Props): JSX.Element {
   //todo fix the error
   //todo chnage to react-query
 
-  // const partnerQuery = useQuery(["partner", threadId], () =>
-  //   axios_instance(true)({
-  //     method: "GET",
-  //     url: "users/thread/one",
-  //     data: { thread_id: threadId },
-  //   })
-  // );
-  console.log("thread", selectedThread);
   useEffect(() => {
     if (!user?._id || !thread_id) return;
 
@@ -177,7 +179,7 @@ function Chat({}: Props): JSX.Element {
           {messages &&
             messages.map((message, id) => (
               <Message
-                // partner={message.sender}
+                img={selectedThread?.client.profileImg}
                 key={id}
                 content={message.content}
                 myMessage={user?._id === message.sender}

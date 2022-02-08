@@ -6,9 +6,15 @@ interface Props {
   myMessage?: boolean;
   content: string;
   lastMessage: boolean;
+  img?: string;
 }
 
-function Message({ myMessage, content, lastMessage }: Props): ReactElement {
+function Message({
+  myMessage,
+  content,
+  lastMessage,
+  img,
+}: Props): ReactElement {
   const tailMessage = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (lastMessage)
@@ -19,7 +25,7 @@ function Message({ myMessage, content, lastMessage }: Props): ReactElement {
       ref={tailMessage}
       className={myMessage ? styles.container : styles.sender}
     >
-      {!myMessage && <img src="/hero.jpg" alt="user" />}
+      {!myMessage && <img src={img} alt="user" />}
       <p>{content}</p>
     </div>
   );
