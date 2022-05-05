@@ -22,9 +22,6 @@ function Search({}: Props) {
         url: `products/search?search=${search}`,
       });
       return res.data;
-    },
-    {
-      onSuccess: (data) => console.log(data),
     }
   );
   return (
